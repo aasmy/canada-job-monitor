@@ -1,0 +1,68 @@
+# Every entry in this list is a target for Google Alerts searches.
+# A target is NOT a direct scraper; add Google Alerts RSS URL(s) below.
+board_targets:
+  linkedin: linkedin.com/jobs
+  indeed: ca.indeed.com
+  ziprecruiter: ziprecruiter.com
+  simplify: simplify.jobs
+  glassdoor: glassdoor.ca
+  wellfound: wellfound.com
+  ycombinator: ycombinator.com/jobs
+  workatastartup: workatastartup.com
+  jobbank: jobbank.gc.ca
+  techjobsca: techjobs.ca
+  communitech: communitech.ca/jobs
+  eluta: eluta.ca
+  googlejobs: google.com/search
+  dice: dice.com
+  hackernews: news.ycombinator.com
+sources:
+  greenhouse: []
+  lever: []
+  ashby: []
+discovery:
+  # Create Google Alerts RSS feeds for the searches in ALERTS_SETUP.md and paste URLs.
+  # For a secret URL, use ${GOOGLE_ALERT_RSS_1} and add it as a workflow secret.
+  rss_feeds: []
+  # Optional Google search via SerpApi. Real Google search, subject to quota/cost.
+  serpapi:
+    enabled: false
+    max_queries_per_run: 1
+    queries:
+      - 'site:linkedin.com/jobs/view/ ("junior software" OR "software engineer i") (Canada OR Vancouver)'
+      - 'site:ca.indeed.com/viewjob "software developer" "Vancouver"'
+      - 'site:simplify.jobs "new grad" "Canada" "software"'
+      - 'site:wellfound.com/jobs "software engineer" "Canada"'
+      - 'site:jobbank.gc.ca "software developer" "British Columbia"'
+      - 'site:glassdoor.ca/Job "junior software engineer" "Canada"'
+      - 'site:ziprecruiter.com "junior software engineer" "Canada"'
+      - 'site:workatastartup.com "software engineer" "Canada"'
+      - 'site:techjobs.ca "software developer" "Canada"'
+      - 'site:eluta.ca "software engineer" "Vancouver"'
+      - 'site:communitech.ca/jobs "software developer" "Ontario"'
+      - 'site:dice.com "software developer" "Canada"'
+      - 'site:ycombinator.com/jobs "software engineer" "Canada"'
+      - 'site:news.ycombinator.com "who is hiring" "Canada"'
+  hackernews:
+    enabled: true
+    max_comments: 100
+filters:
+  locations: [canada, remote canada, british columbia, vancouver, burnaby, richmond, surrey, victoria, bc, toronto, montreal, ottawa, calgary, edmonton, waterloo, ontario, alberta, quebec]
+  max_years: 2
+  role_keywords: [software developer, software engineer, full stack, full-stack, backend, back-end, frontend, front-end, web developer, junior web developer, application developer, developer i, engineer i]
+  exclude_title_keywords: [senior, staff, principal, lead, manager, director, architect, intern, internship, co-op, coop]
+  include_internships: false
+  minimum_score: 45
+  # Feed search snippets often lack an explicit location. Send these for manual review.
+  allow_unknown_location_as_review: true
+monitor:
+  send_existing_on_first_run: false
+  max_notifications_per_run: 20
+  request_delay_seconds: 1.5
+  default_poll_interval_minutes: 15
+  poll_intervals_minutes:
+    greenhouse: 60
+    lever: 60
+    ashby: 60
+    rss: 15
+    serpapi: 240

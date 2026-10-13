@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+.venv/
+.env
+*.pyc
+# GitHub Actions force-adds this for persistence; never store sensitive data in it.
+jobs.sqlite3
