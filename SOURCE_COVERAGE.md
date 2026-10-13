@@ -11,6 +11,8 @@ This project deliberately separates direct integrations from indirect discovery.
 | Ashby company boards | Public Ashby posting API | `sources.ashby[].board` | Source-provided published timestamp |
 | Hacker News Who Is Hiring | Public HN Algolia API | `discovery.hackernews.enabled` | Comment creation timestamp |
 
+Direct company-board integrations are working when valid board identifiers are configured. The repository does not ship active fabricated employer slugs.
+
 ## Indirect Discovery
 
 These sources are covered through Google Alerts RSS feeds you create, optional SerpApi Google searches, or both. The monitor reads the RSS/API outputs only; it does not scrape Google result pages or the target sites.
@@ -31,6 +33,8 @@ These sources are covered through Google Alerts RSS feeds you create, optional S
 | Eluta.ca | Google Alerts RSS / optional SerpApi | Configure targeted alerts. |
 | Google Jobs | Cross-web Google Alerts / optional SerpApi | Google Jobs is a search UI, not a public feed. |
 | Dice | Google Alerts RSS / optional SerpApi | Configure targeted alerts. |
+
+The Job Hub source-health table reports configured sources that returned data or failed during persistent monitor runs. A mocked test passing does not mean a live external source is healthy.
 
 ## Manual Configuration Required
 
