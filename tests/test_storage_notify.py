@@ -34,6 +34,20 @@ class StorageNotifyTests(unittest.TestCase):
             finally:
                 store.close()
 
+    def test_source_health_tracks_success_and_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store = connect(str(Path(tmp) / "jobs.sqlite3"))
+            try:
+                store.record_source_successes([("hackernews", 90, 2, "direct")])
+                alerts = store.record_source_errors(["rss-feed: Timeout"])
+                store.commit()
+                self.assertEqual(alerts, [])
+                self.assertEqual(store.record_source_errors(["rss-feed: Timeout"]), [])
+                alerts = store.record_source_errors(["rss-feed: Timeout"])
+                self.assertEqual(alerts[0][0], "rss-feed")
+            finally:
+                store.close()
+
     def test_telegram_html_is_escaped(self):
         job = Job("test", "1", "A < B", "Junior Software Developer", "Remote - Canada", "https://example.com", "Python & React")
         text = format_telegram(job, analyze(job, CONFIG))

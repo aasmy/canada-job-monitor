@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 import html
+import time
 import requests
 
 
@@ -52,18 +53,32 @@ Why: {_escape(match.explanation)}"""
     return text[:3900]
 
 
+def _post_with_retries(token, payload, attempts=3):
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            response = requests.post(f"https://api.telegram.org/bot{token}/sendMessage", json=payload, timeout=20)
+            response.raise_for_status()
+            data = response.json()
+            if not data.get("ok"):
+                raise RuntimeError(f"Telegram rejected message: {data}")
+            return data
+        except (requests.RequestException, ValueError, RuntimeError) as exc:
+            last_error = exc
+            if attempt == attempts:
+                break
+            time.sleep(min(8, 2 ** attempt))
+    raise RuntimeError(f"Telegram delivery failed after {attempts} attempts: {last_error}")
+
+
 def send_telegram(token, chat_id, job, match):
-    response = requests.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
+    payload = {
         "chat_id": chat_id,
         "text": format_telegram(job, match),
         "parse_mode": "HTML",
         "disable_web_page_preview": True,
-    }, timeout=20)
-    response.raise_for_status()
-    payload = response.json()
-    if not payload.get("ok"):
-        raise RuntimeError(f"Telegram rejected message: {payload}")
-    return payload
+    }
+    return _post_with_retries(token, payload)
 
 
 def send_error_notification(token, chat_id, source: str, count: int, error: str):
@@ -72,14 +87,21 @@ def send_error_notification(token, chat_id, source: str, count: int, error: str)
 Source: {_escape(source)}
 Consecutive failures: {count}
 Last error: {_escape(error[:1000])}"""
-    response = requests.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
+    return _post_with_retries(token, {
         "chat_id": chat_id,
         "text": text[:3900],
         "parse_mode": "HTML",
         "disable_web_page_preview": True,
-    }, timeout=20)
-    response.raise_for_status()
-    payload = response.json()
-    if not payload.get("ok"):
-        raise RuntimeError(f"Telegram rejected message: {payload}")
-    return payload
+    })
+
+
+def send_test_notification(token, chat_id):
+    text = """<b>Canada Job Monitor Test</b>
+
+Telegram delivery is working. This message was sent by the manual test command/workflow."""
+    return _post_with_retries(token, {
+        "chat_id": chat_id,
+        "text": text,
+        "parse_mode": "HTML",
+        "disable_web_page_preview": True,
+    })

@@ -53,6 +53,7 @@ class Store:
     def mark_notified(self, key: str) -> None: raise NotImplementedError
     def mark_notification_failed(self, key: str, error: str) -> None: raise NotImplementedError
     def record_source_errors(self, errors: Iterable[str]) -> list[tuple[str, int, str]]: raise NotImplementedError
+    def record_source_successes(self, rows: Iterable[tuple[str, int, int, str]]) -> None: raise NotImplementedError
     def commit(self) -> None: raise NotImplementedError
     def close(self) -> None: raise NotImplementedError
 
@@ -90,8 +91,27 @@ class SQLiteStore(Store):
             consecutive_failures INTEGER NOT NULL DEFAULT 0,
             last_error TEXT,
             last_seen TEXT NOT NULL,
-            last_notified_count INTEGER NOT NULL DEFAULT 0
+            last_notified_count INTEGER NOT NULL DEFAULT 0,
+            last_success TEXT,
+            last_failure TEXT,
+            jobs_retrieved INTEGER NOT NULL DEFAULT 0,
+            matched_jobs INTEGER NOT NULL DEFAULT 0,
+            integration_type TEXT,
+            configured_status TEXT,
+            quota_status TEXT
         )""")
+        health_existing = {row[1] for row in self.db.execute("PRAGMA table_info(source_health)")}
+        for name, spec in {
+            "last_success": "TEXT",
+            "last_failure": "TEXT",
+            "jobs_retrieved": "INTEGER NOT NULL DEFAULT 0",
+            "matched_jobs": "INTEGER NOT NULL DEFAULT 0",
+            "integration_type": "TEXT",
+            "configured_status": "TEXT",
+            "quota_status": "TEXT",
+        }.items():
+            if name not in health_existing:
+                self.db.execute(f"ALTER TABLE source_health ADD COLUMN {name} {spec}")
         self.db.commit()
 
     def count_jobs(self) -> int:
@@ -141,14 +161,32 @@ class SQLiteStore(Store):
             row = self.db.execute("SELECT consecutive_failures, last_notified_count FROM source_health WHERE source=?", (source,)).fetchone()
             if row is None:
                 count, notified = 1, 0
-                self.db.execute("INSERT INTO source_health VALUES (?,?,?,?,?)", (source, count, error[:1000], timestamp, notified))
+                self.db.execute("""INSERT INTO source_health (
+                    source, consecutive_failures, last_error, last_seen, last_notified_count,
+                    last_failure, configured_status
+                ) VALUES (?,?,?,?,?,?,?)""", (source, count, error[:1000], timestamp, notified, timestamp, "failing"))
             else:
                 count, notified = int(row[0]) + 1, int(row[1])
-                self.db.execute("UPDATE source_health SET consecutive_failures=?, last_error=?, last_seen=? WHERE source=?", (count, error[:1000], timestamp, source))
+                self.db.execute("UPDATE source_health SET consecutive_failures=?, last_error=?, last_seen=?, last_failure=? WHERE source=?", (count, error[:1000], timestamp, timestamp, source))
             if count >= 3 and count not in {notified} and (count in {3, 12, 48} or count % 96 == 0):
                 alerts.append((source, count, error))
                 self.db.execute("UPDATE source_health SET last_notified_count=? WHERE source=?", (count, source))
         return alerts
+
+    def record_source_successes(self, rows: Iterable[tuple[str, int, int, str]]) -> None:
+        timestamp = now_utc()
+        for source, jobs_retrieved, matched_jobs, integration_type in rows:
+            self.db.execute("""INSERT INTO source_health (
+                source, consecutive_failures, last_error, last_seen, last_notified_count,
+                last_success, last_failure, jobs_retrieved, matched_jobs, integration_type,
+                configured_status, quota_status
+            ) VALUES (?,0,NULL,?,0,?,NULL,?,?,?,'working','ok')
+            ON CONFLICT(source) DO UPDATE SET
+                consecutive_failures=0, last_error=NULL, last_seen=excluded.last_seen,
+                last_success=excluded.last_success, jobs_retrieved=excluded.jobs_retrieved,
+                matched_jobs=excluded.matched_jobs, integration_type=excluded.integration_type,
+                configured_status='working', quota_status='ok'""",
+                (source[:120], timestamp, timestamp, int(jobs_retrieved), int(matched_jobs), integration_type))
 
     def commit(self) -> None:
         self.db.commit()
@@ -171,7 +209,14 @@ class PostgresStore(Store):
                 consecutive_failures INT NOT NULL DEFAULT 0,
                 last_error TEXT,
                 last_seen TEXT NOT NULL,
-                last_notified_count INT NOT NULL DEFAULT 0
+                last_notified_count INT NOT NULL DEFAULT 0,
+                last_success TEXT,
+                last_failure TEXT,
+                jobs_retrieved INT NOT NULL DEFAULT 0,
+                matched_jobs INT NOT NULL DEFAULT 0,
+                integration_type TEXT,
+                configured_status TEXT,
+                quota_status TEXT
             )""")
         self.db.commit()
 
@@ -241,7 +286,9 @@ class PostgresStore(Store):
                     ON CONFLICT (source) DO UPDATE SET
                     consecutive_failures=source_health.consecutive_failures+1,
                     last_error=EXCLUDED.last_error,
-                    last_seen=EXCLUDED.last_seen
+                    last_seen=EXCLUDED.last_seen,
+                    last_failure=EXCLUDED.last_seen,
+                    configured_status='failing'
                     RETURNING consecutive_failures, last_notified_count""", (source, error[:1000], timestamp))
                 count, notified = cur.fetchone()
                 count, notified = int(count), int(notified)
@@ -249,6 +296,22 @@ class PostgresStore(Store):
                     alerts.append((source, count, error))
                     cur.execute("UPDATE source_health SET last_notified_count=%s WHERE source=%s", (count, source))
         return alerts
+
+    def record_source_successes(self, rows: Iterable[tuple[str, int, int, str]]) -> None:
+        timestamp = now_utc()
+        with self.db.cursor() as cur:
+            for source, jobs_retrieved, matched_jobs, integration_type in rows:
+                cur.execute("""INSERT INTO source_health (
+                    source, consecutive_failures, last_error, last_seen, last_notified_count,
+                    last_success, last_failure, jobs_retrieved, matched_jobs, integration_type,
+                    configured_status, quota_status
+                ) VALUES (%s,0,NULL,%s,0,%s,NULL,%s,%s,%s,'working','ok')
+                ON CONFLICT(source) DO UPDATE SET
+                    consecutive_failures=0, last_error=NULL, last_seen=EXCLUDED.last_seen,
+                    last_success=EXCLUDED.last_success, jobs_retrieved=EXCLUDED.jobs_retrieved,
+                    matched_jobs=EXCLUDED.matched_jobs, integration_type=EXCLUDED.integration_type,
+                    configured_status='working', quota_status='ok'""",
+                    (source[:120], timestamp, timestamp, int(jobs_retrieved), int(matched_jobs), integration_type))
 
     def commit(self) -> None:
         self.db.commit()

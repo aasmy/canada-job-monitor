@@ -41,6 +41,14 @@ python -m jobmonitor.main --dry-run
 
 Dry-run discovers and scores jobs but does not write notification state or send Telegram messages.
 
+Send a Telegram self-test locally:
+
+```powershell
+$env:TELEGRAM_BOT_TOKEN="your-token"
+$env:TELEGRAM_CHAT_ID="your-chat-id"
+python -m jobmonitor.main --test-telegram
+```
+
 Generate the local hub:
 
 ```powershell
@@ -145,10 +153,11 @@ The app creates the `jobs` table and indexes automatically. If no Postgres URL i
    - `SERPAPI_KEY` only if SerpApi is enabled
 3. Enable Actions.
 4. Run `Tests` manually once.
-5. Run `Canada job monitor` manually once to create the initial baseline. Existing eligible jobs are marked as already notified unless `monitor.send_existing_on_first_run` is true or you pass `--include-existing`.
-6. In repository Settings, Pages, set the source to **GitHub Actions**.
-7. The monitor workflow generates and deploys the Job Hub after each run. The Pages URL appears in the workflow summary and usually looks like `https://YOUR-USER.github.io/YOUR-REPO/`.
-8. The scheduled workflow runs at minutes `7,22,37,52` UTC every hour. GitHub may delay or skip scheduled jobs, so this is best-effort 15-minute monitoring.
+5. Run `Telegram self-test` manually once. If it succeeds, the workflow log shows a Telegram `message_id` without printing secrets.
+6. Run `Canada job monitor` manually once to create the initial baseline. Existing eligible jobs are marked as already notified unless `monitor.send_existing_on_first_run` is true or you pass `--include-existing`.
+7. In repository Settings, Pages, set the source to **GitHub Actions**.
+8. The monitor workflow generates and deploys the Job Hub after each run. The Pages URL appears in the workflow summary and usually looks like `https://YOUR-USER.github.io/YOUR-REPO/`.
+9. The scheduled workflow runs at minutes `7,22,37,52` UTC every hour. GitHub may delay or skip scheduled jobs, so this is best-effort 15-minute monitoring.
 
 Important privacy note: standard GitHub Pages sites may be public depending on your GitHub plan and repository settings. If you do not want job leads visible publicly, use a private Pages option, deploy the generated `public/index.html` to a private host, or keep the hub local.
 
@@ -157,6 +166,8 @@ Important privacy note: standard GitHub Pages sites may be public depending on y
 Stored fields include stable job ID, duplicate key, company, title, location, workplace, description, publication timestamp, first/last seen timestamps, source, application URL, canonical URL, score, explanation, skills, eligibility, notification status, notification time, and delivery error.
 
 Deduplication uses stable external IDs and a conservative company/title/location key. It avoids merging unrelated jobs solely because titles look similar. A Telegram alert is marked delivered only after the Telegram API returns `ok: true`.
+
+The dashboard also displays source health from the persistent database: integration type, configured status, jobs retrieved, matched jobs, consecutive failures, last success, and recent errors. A source warning Telegram message is sent after repeated failures, with rate limiting so temporary outages do not flood you.
 
 ## Testing
 
@@ -169,6 +180,7 @@ Tests mock or use local data for filtering, feed parsing, canonical URLs, dedupl
 ## Troubleshooting
 
 - `Missing Telegram secrets`: add `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`.
+- Telegram test workflow succeeds but no job alerts arrive: the first monitor run creates a baseline and intentionally suppresses old listings. Set `monitor.send_existing_on_first_run: true`, run with `--include-existing`, or wait for a newly discovered eligible job.
 - `No configured sources succeeded`: add Google Alerts RSS feeds, company boards, or keep HN enabled.
 - Too many weak review jobs: set `allow_unknown_location_as_review: false` or raise `minimum_score`.
 - No Google results: verify the RSS feed URL is HTTPS and still valid.

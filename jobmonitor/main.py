@@ -12,7 +12,7 @@ from .discovery import google_alert_feeds, serpapi_search
 from .hackernews import fetch as fetch_hn
 from .filtering import analyze
 from .store import connect
-from .notify import format_telegram, send_error_notification, send_telegram
+from .notify import format_telegram, send_error_notification, send_telegram, send_test_notification
 
 
 def load_config(path: str) -> dict:
@@ -41,9 +41,24 @@ def run(argv=None):
     parser.add_argument("--db", default="jobs.sqlite3")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--include-existing", action="store_true", help="send existing listings on first persistent run")
+    parser.add_argument("--test-telegram", action="store_true", help="send a synthetic Telegram test notification and exit")
     args = parser.parse_args(argv)
 
     config = load_config(args.config)
+    token, chat_id = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
+    if args.test_telegram:
+        if not token or not chat_id:
+            print("Missing Telegram secrets", file=sys.stderr)
+            return 1
+        try:
+            payload = send_test_notification(token, chat_id)
+            message_id = payload.get("result", {}).get("message_id", "unknown")
+            print(f"Telegram test delivered; message_id={message_id}")
+            return 0
+        except (requests.RequestException, RuntimeError, ValueError) as exc:
+            print(f"Telegram test failed: {exc}", file=sys.stderr)
+            return 1
+
     jobs, errors, successes = discover(config)
     for err in errors:
         print("SOURCE ERROR:", err, file=sys.stderr)
@@ -63,7 +78,6 @@ def run(argv=None):
             print(format_telegram(eligible[0][0], eligible[0][1]))
         return int(bool(errors))
 
-    token, chat_id = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
     if not token or not chat_id:
         print("Missing Telegram secrets", file=sys.stderr)
         return 1
@@ -78,6 +92,15 @@ def run(argv=None):
             by_key[key] = job
             by_match[key] = match
             store.record(job, match)
+        totals = {}
+        matched = {}
+        for job, match in matches:
+            totals[job.source] = totals.get(job.source, 0) + 1
+            if match.eligible:
+                matched[job.source] = matched.get(job.source, 0) + 1
+        direct = {"greenhouse", "lever", "ashby", "hackernews"}
+        store.record_source_successes((source, count, matched.get(source, 0), "direct" if source in direct else "indirect")
+                                      for source, count in totals.items())
         health_alerts = store.record_source_errors(errors)
         store.commit()
 
@@ -97,10 +120,11 @@ def run(argv=None):
             if not job or not match:
                 continue
             try:
-                send_telegram(token, chat_id, job, match)
+                payload = send_telegram(token, chat_id, job, match)
                 store.mark_notified(key)
                 store.commit()
-                print("Alerted:", job.title[:90])
+                message_id = payload.get("result", {}).get("message_id", "unknown")
+                print(f"Alert delivered message_id={message_id}: {job.title[:90]}")
             except (requests.RequestException, ValueError, RuntimeError) as exc:
                 store.mark_notification_failed(key, str(exc))
                 store.commit()

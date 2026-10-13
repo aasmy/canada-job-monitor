@@ -24,14 +24,25 @@ def _connect_rows(db_path: str):
         with psycopg.connect(dsn) as db:
             with db.cursor() as cur:
                 cur.execute(query)
-                return cur.fetchall()
+                jobs = cur.fetchall()
+                cur.execute("""SELECT source, configured_status, integration_type, jobs_retrieved,
+                    matched_jobs, consecutive_failures, last_success, last_failure, last_error, quota_status
+                    FROM source_health ORDER BY source""")
+                return jobs, cur.fetchall()
     if not Path(db_path).exists():
-        return []
+        return [], []
     with sqlite3.connect(db_path) as db:
         try:
-            return db.execute(query).fetchall()
+            jobs = db.execute(query).fetchall()
+            try:
+                health = db.execute("""SELECT source, configured_status, integration_type, jobs_retrieved,
+                    matched_jobs, consecutive_failures, last_success, last_failure, last_error, quota_status
+                    FROM source_health ORDER BY source""").fetchall()
+            except sqlite3.OperationalError:
+                health = []
+            return jobs, health
         except sqlite3.OperationalError:
-            return []
+            return [], []
 
 
 def _freshness(published_at: str, first_seen: str) -> tuple[str, str]:
@@ -79,8 +90,24 @@ def _jobs(rows):
     return result
 
 
-def _html(jobs: list[dict]) -> str:
+def _health(rows):
+    return [{
+        "source": row[0] or "unknown",
+        "status": row[1] or "unknown",
+        "type": row[2] or "unknown",
+        "jobs": int(row[3] or 0),
+        "matches": int(row[4] or 0),
+        "failures": int(row[5] or 0),
+        "lastSuccess": row[6] or "",
+        "lastFailure": row[7] or "",
+        "lastError": row[8] or "",
+        "quota": row[9] or "",
+    } for row in rows]
+
+
+def _html(jobs: list[dict], health: list[dict]) -> str:
     data = json.dumps(jobs, ensure_ascii=False).replace("</", "<\\/")
+    health_data = json.dumps(health, ensure_ascii=False).replace("</", "<\\/")
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     return f"""<!doctype html>
 <html lang="en">
@@ -118,6 +145,12 @@ def _html(jobs: list[dict]) -> str:
     input, select {{ width: 100%; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 10px 11px; color: var(--ink); font: inherit; }}
     main .wrap {{ padding-top: 18px; }}
     .list {{ display: grid; gap: 10px; }}
+    .health {{ margin-bottom: 18px; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }}
+    .health h2 {{ margin: 0; padding: 13px 14px; font-size: 15px; border-bottom: 1px solid var(--line); }}
+    table {{ width: 100%; border-collapse: collapse; font-size: 13px; }}
+    th, td {{ text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }}
+    th {{ color: var(--muted); font-weight: 650; background: #f9fafb; }}
+    tr:last-child td {{ border-bottom: 0; }}
     .job {{ background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--blue); border-radius: 8px; padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 12px; }}
     .job.high {{ border-left-color: var(--green); }}
     .job.review {{ border-left-color: var(--gold); }}
@@ -177,10 +210,11 @@ def _html(jobs: list[dict]) -> str:
       </section>
     </div>
   </header>
-  <main><div class="wrap"><section id="list" class="list"></section></div></main>
+  <main><div class="wrap"><section id="health" class="health"></section><section id="list" class="list"></section></div></main>
   <footer>Publication dates are source-provided when available. Unknown dates are not assumed to be recent.</footer>
   <script>
     const jobs = {data};
+    const health = {health_data};
     const list = document.getElementById('list');
     const source = document.getElementById('source');
     const controls = ['search', 'freshness', 'source', 'score'].map(id => document.getElementById(id));
@@ -227,7 +261,16 @@ def _html(jobs: list[dict]) -> str:
         </article>`;
       }}).join('');
     }}
+    function renderHealth() {{
+      const target = document.getElementById('health');
+      if (!health.length) {{
+        target.innerHTML = '<h2>Source health</h2><div class="empty">No persistent source health yet. Run the monitor once with a database configured.</div>';
+        return;
+      }}
+      target.innerHTML = `<h2>Source health</h2><table><thead><tr><th>Source</th><th>Status</th><th>Type</th><th>Jobs</th><th>Matches</th><th>Failures</th><th>Last success</th></tr></thead><tbody>${{health.map(h => `<tr><td>${{esc(h.source)}}</td><td>${{esc(h.status)}}</td><td>${{esc(h.type)}}</td><td>${{h.jobs}}</td><td>${{h.matches}}</td><td>${{h.failures}}</td><td>${{esc(h.lastSuccess || 'none')}}</td></tr>`).join('')}}</tbody></table>`;
+    }}
     controls.forEach(control => control.addEventListener('input', render));
+    renderHealth();
     render();
   </script>
 </body>
@@ -235,10 +278,12 @@ def _html(jobs: list[dict]) -> str:
 
 
 def generate(db_path: str, output: str):
-    jobs = _jobs(_connect_rows(db_path))
+    job_rows, health_rows = _connect_rows(db_path)
+    jobs = _jobs(job_rows)
+    health = _health(health_rows)
     out = Path(output)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(_html(jobs), encoding="utf8")
+    out.write_text(_html(jobs, health), encoding="utf8")
     return len(jobs)
 
 
