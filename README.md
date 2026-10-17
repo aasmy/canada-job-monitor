@@ -178,6 +178,19 @@ Important privacy note: standard GitHub Pages sites may be public depending on y
 
 ## Persistence and Deduplication
 
+The hub defaults to jobs published within the last seven days, ordered by
+publication time. Choose All dates, Older, or Unknown to inspect the retained
+backlog. Every listing displays publication and first-discovery dates separately.
+An undated listing is never classified as fresh just because it was discovered
+today. Google Alerts entry timestamps are not employer publication dates.
+
+Telegram alerts require a known publication date within seven days by default.
+Adjust `notifications.max_publication_age_days` to change this window. Set
+`notifications.include_unknown_publication_dates: true` only to opt into undated
+opportunities, which may be old. Existing stored jobs are preserved. Sources
+without reliable publication dates may consequently appear only in Unknown and
+produce no immediate alert; this avoids presenting old listings as new postings.
+
 Stored fields include stable job ID, duplicate key, company, title, location, workplace, description, publication timestamp, first/last seen timestamps, source, application URL, canonical URL, score, explanation, skills, eligibility, notification status, notification time, and delivery error.
 
 Deduplication uses stable external IDs and a conservative company/title/location key. It avoids merging unrelated jobs solely because titles look similar. A Telegram alert is marked delivered only after the Telegram API returns `ok: true`.

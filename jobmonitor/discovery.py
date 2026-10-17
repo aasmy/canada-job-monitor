@@ -57,7 +57,7 @@ def parse_feed(xml, label='rss'):
         # Search results frequently contain a publisher suffix; avoid fabricating company/location.
         source = detect_source(url)
         entries.append(Job(source, canonicalize_url(url), source, title, '', url, summary,
-                           parse_datetime(field('pubDate','{http://www.w3.org/2005/Atom}updated')),
+                           '',  # A feed-entry timestamp does not date the employer's posting.
                            canonicalize_url(url), workplace_from_text(title, summary)))
     return entries
 

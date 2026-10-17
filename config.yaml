@@ -77,6 +77,9 @@ filters:
   minimum_score: 45
   # Feed search snippets often lack an explicit location. Send these for manual review.
   allow_unknown_location_as_review: false
+notifications:
+  max_publication_age_days: 7
+  include_unknown_publication_dates: false
 monitor:
   send_existing_on_first_run: false
   max_notifications_per_run: 20
