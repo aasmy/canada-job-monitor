@@ -96,7 +96,7 @@ def _health(rows):
         'source': r[0] or 'unknown', 'status': r[1] or 'unknown', 'type': r[2] or 'unknown',
         'jobs': int(r[3] or 0), 'matches': int(r[4] or 0), 'failures': int(r[5] or 0),
         'lastSuccess': r[6] or '', 'lastFailure': r[7] or '',
-        'lastError': r[8] or '', 'quota': r[9] or '',
+        'quota': r[9] or '',
     } for r in rows]
 
 

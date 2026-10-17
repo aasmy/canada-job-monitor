@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from jobmonitor.dashboard import _jobs, _html
+from jobmonitor.dashboard import _jobs, _html, _health
 
 
 def row(source, title='Software Engineer I', published='', company='Acme'):
@@ -29,3 +29,8 @@ class DashboardTests(unittest.TestCase):
         data = list(row('greenhouse'))
         data[5] = 'javascript:alert(1)'
         self.assertEqual(_jobs([data]), [])
+
+    def test_public_source_activity_omits_raw_request_errors(self):
+        health = _health([('feed', 'failing', 'indirect', 0, 0, 1, '', '',
+                           'Request failed https://example.com?api_key=private-token', '')])
+        self.assertNotIn('private-token', _html([], health))
