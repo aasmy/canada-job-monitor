@@ -41,7 +41,7 @@ def analyze(job, config):
 
     if _contains_any(title, f['role_keywords']):
         score += 30; notes.append('role title matches target software roles')
-    elif _contains_any(combined, f['role_keywords']):
+    elif job.source not in {'greenhouse', 'lever', 'ashby', 'simplify'} and _contains_any(combined, f['role_keywords']):
         score += 18; notes.append('description mentions target software roles')
     else:
         return MatchResult(False, 'role mismatch', 0, 'Excluded because neither title nor description matched configured software roles.')
@@ -65,6 +65,9 @@ def analyze(job, config):
     location = job.location.lower()
     if _contains_any(location, f['locations']):
         score += 25; notes.append('location explicitly matches Canada targets')
+    elif location.strip() and job.source in {'greenhouse', 'lever', 'ashby', 'simplify'}:
+        return MatchResult(False, 'location unconfirmed/outside target', 0,
+                           'The employer location does not explicitly include Canada; company boilerplate does not establish eligibility.')
     elif 'remote' in location and 'canada' in combined:
         score += 22; notes.append('remote role appears Canada-eligible')
     elif _contains_any(combined, f['locations']):

@@ -46,7 +46,7 @@ def canonicalize_url(url: str) -> str:
     if not parsed.scheme or not parsed.netloc:
         return url.strip()
     query = [(k, v) for k, v in parse_qsl(parsed.query, keep_blank_values=True)
-             if not k.lower().startswith("utm_") and k.lower() not in {"fbclid", "gclid", "igshid"}]
+             if not k.lower().startswith("utm_") and k.lower() not in {"fbclid", "gclid", "igshid", "ref"}]
     clean = parsed._replace(
         scheme=parsed.scheme.lower(),
         netloc=parsed.netloc.lower().removeprefix("www."),
@@ -97,7 +97,7 @@ def greenhouse(session, board, company):
         description = plain(item.get("content", ""))
         yield Job("greenhouse", str(item["id"]), company, item.get("title", ""),
                   location, item.get("absolute_url", ""), description,
-                  parse_datetime(item.get("updated_at", "")),
+                  parse_datetime(item.get("first_published", "")),
                   canonicalize_url(item.get("absolute_url", "")),
                   workplace_from_text(location, description))
 
@@ -110,7 +110,8 @@ def lever(session, board, company):
         all_locations = categories.get("allLocations") or []
         if all_locations:
             location = ", ".join(all_locations)
-        description = plain(item.get("descriptionPlain") or item.get("description") or "")
+        sections = " ".join(str(section.get("text", "")) + " " + str(section.get("content", "")) for section in item.get("lists", []))
+        description = plain(" ".join([item.get("descriptionPlain") or item.get("description") or "", sections, item.get("additionalPlain") or item.get("additional") or ""]))
         yield Job("lever", str(item["id"]), company, item.get("text", ""), location,
                   item.get("hostedUrl", ""), description,
                   parse_datetime(str(item.get("createdAt", ""))),
@@ -157,7 +158,9 @@ def collect(config):
                 continue
             board = item["board"]
             try:
-                jobs.extend(list(adapter(session, board, item.get("company", board))))
+                found = list(adapter(session, board, item.get("company", board)))
+                jobs.extend(found)
+                print(f"Source {source}/{board}: {len(found)} listings")
                 successes += 1
             except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
                 errors.append(f"{source}/{board}: {type(exc).__name__}: {exc}")

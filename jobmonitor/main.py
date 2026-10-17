@@ -10,6 +10,7 @@ import yaml
 from .sources import collect
 from .discovery import google_alert_feeds, serpapi_search
 from .hackernews import fetch as fetch_hn
+from .simplify import fetch as fetch_simplify
 from .filtering import analyze
 from .store import connect
 from .notify import format_telegram, send_error_notification, send_telegram, send_test_notification
@@ -23,6 +24,14 @@ def load_config(path: str) -> dict:
 def discover(config: dict):
     jobs, errors, successes = collect(config)
     session = requests.Session()
+    if config.get("discovery", {}).get("simplify_public_list", {}).get("enabled", False):
+        try:
+            found = fetch_simplify(session)
+            jobs += found
+            successes += 1
+            print(f"Source simplify/public-list: {len(found)} listings")
+        except (requests.RequestException, ValueError, KeyError) as exc:
+            errors.append(f"simplify: {type(exc).__name__}")
     for adapter in (google_alert_feeds, serpapi_search):
         found, errs, ok = adapter(config, session)
         jobs += found; errors += errs; successes += ok
@@ -36,6 +45,8 @@ def discover(config: dict):
 
 
 def run(argv=None):
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="backslashreplace")
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="config.yaml")
     parser.add_argument("--db", default="jobs.sqlite3")

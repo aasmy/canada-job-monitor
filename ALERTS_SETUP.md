@@ -1,5 +1,12 @@
 # Connect ALL 15 job websites (Google Alerts discovery)
 
+The default configuration uses named secrets for each waiting source.
+After creating each feed, add its URL as a repository Actions secret using
+the exact name in SOURCE_COVERAGE.md (for example GOOGLE_ALERT_RSS_LINKEDIN).
+The workflow passes all 13 named feed secrets to the monitor. Leave unused
+secrets unset; logs report those sources as waiting. Simplify's public list
+and the employer watchlist work without these feeds.
+
 **Coverage explained:** the agent does NOT directly crawl all fifteen websites. It *targets* all fifteen through opted-in Google Alerts RSS and optional paid Google search. A target is discoverable only when Google indexes a relevant page and publishes it in an alert. The adapter cannot guarantee every new posting or 15-minute publication latency.
 
 1. Sign in at https://www.google.com/alerts.

@@ -17,13 +17,35 @@ board_targets:
   dice: dice.com
   hackernews: news.ycombinator.com
 sources:
-  greenhouse: []
-  lever: []
-  ashby: []
+  greenhouse:
+    - {company: Affirm, board: affirm}
+    - {company: Reddit, board: reddit}
+  lever:
+    - {company: PointClickCare, board: pointclickcare}
+  ashby:
+    - {company: Wealthsimple, board: wealthsimple}
+    - {company: Cohere, board: cohere}
+    - {company: 1Password, board: 1password}
+    - {company: Jane, board: jane}
 discovery:
+  simplify_public_list:
+    enabled: true
   # Create Google Alerts RSS feeds for the searches in ALERTS_SETUP.md and paste URLs.
   # For a secret URL, use ${GOOGLE_ALERT_RSS_1} and add it as a workflow secret.
-  rss_feeds: []
+  rss_feeds:
+    - {name: linkedin, url: '${GOOGLE_ALERT_RSS_LINKEDIN}'}
+    - {name: indeed, url: '${GOOGLE_ALERT_RSS_INDEED}'}
+    - {name: ziprecruiter, url: '${GOOGLE_ALERT_RSS_ZIPRECRUITER}'}
+    - {name: glassdoor, url: '${GOOGLE_ALERT_RSS_GLASSDOOR}'}
+    - {name: wellfound, url: '${GOOGLE_ALERT_RSS_WELLFOUND}'}
+    - {name: ycombinator, url: '${GOOGLE_ALERT_RSS_YCOMBINATOR}'}
+    - {name: workatastartup, url: '${GOOGLE_ALERT_RSS_WORKATASTARTUP}'}
+    - {name: jobbank, url: '${GOOGLE_ALERT_RSS_JOBBANK}'}
+    - {name: techjobsca, url: '${GOOGLE_ALERT_RSS_TECHJOBSCA}'}
+    - {name: communitech, url: '${GOOGLE_ALERT_RSS_COMMUNITECH}'}
+    - {name: eluta, url: '${GOOGLE_ALERT_RSS_ELUTA}'}
+    - {name: googlejobs, url: '${GOOGLE_ALERT_RSS_GOOGLEJOBS}'}
+    - {name: dice, url: '${GOOGLE_ALERT_RSS_DICE}'}
   # Optional Google search via SerpApi. Real Google search, subject to quota/cost.
   serpapi:
     enabled: false
@@ -49,20 +71,21 @@ discovery:
 filters:
   locations: [canada, remote canada, british columbia, vancouver, burnaby, richmond, surrey, victoria, bc, toronto, montreal, ottawa, calgary, edmonton, waterloo, ontario, alberta, quebec]
   max_years: 2
-  role_keywords: [software developer, software engineer, full stack, full-stack, backend, back-end, frontend, front-end, web developer, junior web developer, application developer, developer i, engineer i]
+  role_keywords: [software developer, software engineer, full stack, full-stack, backend, back-end, frontend, front-end, web developer, junior web developer, junior developer, application developer, developer i, engineer i]
   exclude_title_keywords: [senior, staff, principal, lead, manager, director, architect, intern, internship, co-op, coop]
   include_internships: false
   minimum_score: 45
   # Feed search snippets often lack an explicit location. Send these for manual review.
-  allow_unknown_location_as_review: true
+  allow_unknown_location_as_review: false
 monitor:
   send_existing_on_first_run: false
   max_notifications_per_run: 20
   request_delay_seconds: 1.5
   default_poll_interval_minutes: 15
   poll_intervals_minutes:
-    greenhouse: 60
-    lever: 60
-    ashby: 60
+    greenhouse: 15
+    lever: 15
+    ashby: 15
+    simplify: 15
     rss: 15
     serpapi: 240
