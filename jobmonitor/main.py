@@ -12,6 +12,7 @@ from .discovery import google_alert_feeds, serpapi_search
 from .hackernews import fetch as fetch_hn
 from .simplify import fetch as fetch_simplify
 from .filtering import analyze
+from .freshness import alert_allowed
 from .store import connect
 from .notify import format_telegram, send_error_notification, send_telegram, send_test_notification
 
@@ -80,13 +81,15 @@ def run(argv=None):
     matches = [(job, analyze(job, config)) for job in jobs if job.url]
     eligible = [(job, match) for job, match in matches if match.eligible]
     print(f"Fetched {len(jobs)} jobs, {len(eligible)} candidates, {successes} successful sources, {len(errors)} errors")
+    recent = [(job, match) for job, match in eligible if alert_allowed(job, config)]
+    print(f"Publication freshness check: {len(recent)} candidates within notification date policy")
 
     if args.dry_run:
         for job, match in sorted(eligible, key=lambda item: item[1].score, reverse=True)[:40]:
             print(f"{match.score:3d} | {match.reason} | {job.title} | {job.best_url()}")
-        if eligible:
+        if recent:
             print("\nExample Telegram notification:\n")
-            print(format_telegram(eligible[0][0], eligible[0][1]))
+            print(format_telegram(recent[0][0], recent[0][1]))
         return int(bool(errors))
 
     if not token or not chat_id:
@@ -125,15 +128,22 @@ def run(argv=None):
 
         limit = min(40, int(config.get("monitor", {}).get("max_notifications_per_run", 20)))
         failed = False
-        for key in store.pending_notifications(limit):
+        delivered = 0
+        for key in store.pending_notifications(max(1, store.count_jobs())):
             job = by_key.get(key)
             match = by_match.get(key)
             if not job or not match:
                 continue
+            if not alert_allowed(job, config):
+                print(f"Alert withheld: old or unverified publication date | {job.title[:90]}")
+                continue
+            if delivered >= limit:
+                break
             try:
                 payload = send_telegram(token, chat_id, job, match)
                 store.mark_notified(key)
                 store.commit()
+                delivered += 1
                 message_id = payload.get("result", {}).get("message_id", "unknown")
                 print(f"Alert delivered message_id={message_id}: {job.title[:90]}")
             except (requests.RequestException, ValueError, RuntimeError) as exc:

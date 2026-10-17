@@ -8,6 +8,7 @@ import os
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
+from .freshness import age_days
 
 
 def _connect_rows(db_path: str):
@@ -46,29 +47,26 @@ def _connect_rows(db_path: str):
 
 
 def _freshness(published_at: str, first_seen: str) -> tuple[str, str]:
-    raw = published_at or first_seen
-    if not raw:
-        return "Unknown", "unknown"
-    try:
-        dt = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
-    except ValueError:
-        return "Unknown", "unknown"
-    hours = (datetime.now(timezone.utc) - dt.astimezone(timezone.utc)).total_seconds() / 3600
+    age = age_days(published_at)
+    if age is None:
+        return "Publication date unknown", "unknown"
+    hours = age * 24
     if hours <= 24:
-        return "24h", "fresh"
+        return "Published within 24 hours", "fresh"
     if hours <= 72:
-        return "3d", "recent"
+        return "Published within 3 days", "recent"
     if hours <= 168:
-        return "7d", "week"
-    return "Older", "older"
+        return "Published within 7 days", "week"
+    return "Published more than 7 days ago", "older"
 
 
 def _jobs(rows):
     result = []
     for row in rows:
         company, title, location, remote_status, source, url, canonical_url, score, explanation, skills, published_at, first_seen, last_seen, notified, eligible = row
+        # Older database rows may contain Google feed-update times as publication.
+        if source not in {'greenhouse', 'lever', 'ashby', 'hackernews'}:
+            published_at = ''
         fresh_label, fresh_group = _freshness(published_at, first_seen)
         result.append({
             "company": company or "Unknown company",
@@ -186,14 +184,15 @@ def _html(jobs: list[dict], health: list[dict]) -> str:
       </div>
       <section class="stats" aria-label="Job summary">
         <div class="stat"><b id="total">0</b><span>Matched jobs</span></div>
-        <div class="stat"><b id="fresh">0</b><span>Published or seen in 24h</span></div>
+        <div class="stat"><b id="fresh">0</b><span>Published in 24h</span></div>
         <div class="stat"><b id="high">0</b><span>Score 75+</span></div>
         <div class="stat"><b id="review">0</b><span>Needs location review</span></div>
       </section>
       <section class="controls" aria-label="Filters">
         <input id="search" placeholder="Search company, title, skill, location">
         <select id="freshness">
-          <option value="">All freshness</option>
+          <option value="last7" selected>Posted in last 7 days</option>
+          <option value="">All dates</option>
           <option value="fresh">24 hours</option>
           <option value="recent">3 days</option>
           <option value="week">7 days</option>
@@ -236,14 +235,17 @@ def _html(jobs: list[dict], health: list[dict]) -> str:
       const min = Number(document.getElementById('score').value || 0);
       const filtered = jobs.filter(j => {{
         const hay = [j.company, j.title, j.location, j.skills, j.why].join(' ').toLowerCase();
-        return (!q || hay.includes(q)) && (!f || j.freshnessGroup === f) && (!s || j.source === s) && j.score >= min;
-      }});
+        const dateMatch = !f || (f === 'last7' ? ['fresh', 'recent', 'week'].includes(j.freshnessGroup) :
+          f === 'recent' ? ['fresh', 'recent'].includes(j.freshnessGroup) :
+          f === 'week' ? ['fresh', 'recent', 'week'].includes(j.freshnessGroup) : j.freshnessGroup === f);
+        return (!q || hay.includes(q)) && dateMatch && (!s || j.source === s) && j.score >= min;
+      }}).sort((a, b) => (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0));
       document.getElementById('total').textContent = jobs.length;
       document.getElementById('fresh').textContent = jobs.filter(j => j.freshnessGroup === 'fresh').length;
       document.getElementById('high').textContent = jobs.filter(j => j.score >= 75).length;
       document.getElementById('review').textContent = jobs.filter(j => /review/i.test(j.why)).length;
       if (!filtered.length) {{
-        list.innerHTML = '<div class="empty">No matching jobs yet. Add feeds or loosen filters, then let the monitor run.</div>';
+        list.innerHTML = '<div class="empty">No jobs match these filters.</div>';
         return;
       }}
       list.innerHTML = filtered.map(j => {{
@@ -253,6 +255,7 @@ def _html(jobs: list[dict], health: list[dict]) -> str:
           <div>
             <h2 class="title">${{esc(j.title)}}</h2>
             <div class="meta"><span>${{esc(j.company)}}</span><span>${{esc(j.location)}}</span><span>${{esc(j.workplace)}}</span><span>${{esc(j.source)}}</span><span>${{esc(j.freshness)}}</span></div>
+            <div class="meta"><span>Published: ${{esc(j.published ? new Date(j.published).toLocaleString() : 'Unknown')}}</span><span>First discovered: ${{esc(j.firstSeen ? new Date(j.firstSeen).toLocaleString() : 'Unknown')}}</span></div>
             <p class="why">${{esc(j.why)}}</p>
             <div class="skills">${{skills}}</div>
             <a class="apply" href="${{esc(j.url)}}" target="_blank" rel="noopener">Open application</a>
