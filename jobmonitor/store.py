@@ -140,15 +140,23 @@ class SQLiteStore(Store):
         return False
 
     def pending_notifications(self, limit: int) -> list[str]:
-        rows = self.db.execute("""SELECT MIN(job_key) FROM jobs
-            WHERE eligible=1 AND notified=0
-            GROUP BY duplicate_key
-            ORDER BY MIN(first_seen)
+        rows = self.db.execute("""SELECT j.job_key FROM jobs j
+            WHERE j.eligible=1 AND j.notified=0 AND NOT EXISTS (
+                SELECT 1 FROM jobs delivered WHERE delivered.notified=1 AND
+                (delivered.duplicate_key=j.duplicate_key OR
+                 (j.canonical_url<>'' AND delivered.canonical_url=j.canonical_url)))
+            AND NOT EXISTS (SELECT 1 FROM jobs sibling WHERE sibling.eligible=1
+                AND sibling.notified=0 AND sibling.job_key<j.job_key AND
+                (sibling.duplicate_key=j.duplicate_key OR
+                 (j.canonical_url<>'' AND sibling.canonical_url=j.canonical_url)))
+            ORDER BY j.first_seen
             LIMIT ?""", (limit,)).fetchall()
         return [row[0] for row in rows]
 
     def mark_notified(self, key: str) -> None:
-        self.db.execute("UPDATE jobs SET notified=1, notified_at=?, notification_error=NULL WHERE job_key=?", (now_utc(), key))
+        self.db.execute("""UPDATE jobs SET notified=1, notified_at=?, notification_error=NULL
+            WHERE duplicate_key=(SELECT duplicate_key FROM jobs WHERE job_key=?)
+            OR canonical_url=(SELECT NULLIF(canonical_url,'') FROM jobs WHERE job_key=?)""", (now_utc(), key, key))
 
     def mark_notification_failed(self, key: str, error: str) -> None:
         self.db.execute("UPDATE jobs SET notification_error=? WHERE job_key=?", (error[:500], key))
@@ -260,16 +268,24 @@ class PostgresStore(Store):
 
     def pending_notifications(self, limit: int) -> list[str]:
         with self.db.cursor() as cur:
-            cur.execute("""SELECT MIN(job_key) FROM jobs
-                WHERE eligible=1 AND notified=0
-                GROUP BY duplicate_key
-                ORDER BY MIN(first_seen)
+            cur.execute("""SELECT j.job_key FROM jobs j
+                WHERE j.eligible=1 AND j.notified=0 AND NOT EXISTS (
+                    SELECT 1 FROM jobs delivered WHERE delivered.notified=1 AND
+                    (delivered.duplicate_key=j.duplicate_key OR
+                     (j.canonical_url<>'' AND delivered.canonical_url=j.canonical_url)))
+                AND NOT EXISTS (SELECT 1 FROM jobs sibling WHERE sibling.eligible=1
+                    AND sibling.notified=0 AND sibling.job_key<j.job_key AND
+                    (sibling.duplicate_key=j.duplicate_key OR
+                     (j.canonical_url<>'' AND sibling.canonical_url=j.canonical_url)))
+                ORDER BY j.first_seen
                 LIMIT %s""", (limit,))
             return [row[0] for row in cur.fetchall()]
 
     def mark_notified(self, key: str) -> None:
         with self.db.cursor() as cur:
-            cur.execute("UPDATE jobs SET notified=1, notified_at=%s, notification_error=NULL WHERE job_key=%s", (now_utc(), key))
+            cur.execute("""UPDATE jobs SET notified=1, notified_at=%s, notification_error=NULL
+                WHERE duplicate_key=(SELECT duplicate_key FROM jobs WHERE job_key=%s)
+                OR canonical_url=(SELECT NULLIF(canonical_url,'') FROM jobs WHERE job_key=%s)""", (now_utc(), key, key))
 
     def mark_notification_failed(self, key: str, error: str) -> None:
         with self.db.cursor() as cur:

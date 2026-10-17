@@ -70,7 +70,9 @@ def google_alert_feeds(config, session):
         url = entry.get('url','') if isinstance(entry,dict) else str(entry)
         if url.startswith('${') and url.endswith('}'):
             url = os.getenv(url[2:-1], '')
-        if not url: continue
+        if not url:
+            print(f'Source {name}: waiting for RSS feed configuration')
+            continue
         if not url.startswith('https://'):
             errors.append(f'{name}: feed URL must use HTTPS'); continue
         try:

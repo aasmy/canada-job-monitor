@@ -16,6 +16,21 @@ Automated Python job monitor for junior/new-grad software roles in Canada. It di
 
 ## Supported Sources
 
+The default configuration now enables seven verified employer boards: Affirm,
+Reddit, PointClickCare, Wealthsimple, Cohere, 1Password, and Jane. Simplify's
+public new-grad GitHub list is also enabled, alongside Hacker News. No extra
+API key is required for these connections. See SOURCE_COVERAGE.md for the live
+verification snapshot and the exact status of the other websites.
+
+The workflow logs each employer's returned listing count and explicitly reports
+which Google Alerts feeds are waiting for configuration. Counts include jobs
+that will subsequently be filtered out. Newly connected sources may contain
+existing listings; the usual per-run notification limit applies.
+
+For LinkedIn and the other sites, create feeds using ALERTS_SETUP.md and add
+the named secrets already referenced in config.yaml, such as
+`GOOGLE_ALERT_RSS_LINKEDIN` and `GOOGLE_ALERT_RSS_INDEED`.
+
 Working direct integrations:
 
 - Greenhouse company boards

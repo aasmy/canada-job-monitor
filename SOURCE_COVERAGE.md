@@ -1,49 +1,62 @@
 # Source Coverage
 
-This project deliberately separates direct integrations from indirect discovery. It does not bypass logins, CAPTCHAs, robots, rate limits, or private APIs. Coverage depends on the sources and feeds you configure.
+## Enabled connections
 
-## Working Direct Integrations
+These public endpoints were tested live on 2026-10-17. Counts include all
+listings returned, before filtering; they are not counts of new matching jobs.
 
-| Source | Method | Configuration | Publication date quality |
+| Employer | Integration | Board | Listings returned |
 |---|---|---|---|
-| Greenhouse company boards | Public Greenhouse Job Board API | `sources.greenhouse[].board` | Source-provided update timestamp |
-| Lever company boards | Public Lever Postings API | `sources.lever[].board` | Source-provided created timestamp |
-| Ashby company boards | Public Ashby posting API | `sources.ashby[].board` | Source-provided published timestamp |
-| Hacker News Who Is Hiring | Public HN Algolia API | `discovery.hackernews.enabled` | Comment creation timestamp |
+| Affirm | Greenhouse | affirm | 214 |
+| Reddit | Greenhouse | reddit | 146 |
+| PointClickCare | Lever | pointclickcare | 79 |
+| Wealthsimple | Ashby | wealthsimple | 48 |
+| Cohere | Ashby | cohere | 118 |
+| 1Password | Ashby | 1password | 74 |
+| Jane | Ashby | jane | 21 |
 
-Direct company-board integrations are working when valid board identifiers are configured. The repository does not ship active fabricated employer slugs.
+Simplify's public new-grad list returned 547 parsed listings. Employer links
+are preferred. Publication dates are unknown: relative list ages are not used
+as dates. This covers the published list, not the whole Simplify website.
 
-## Indirect Discovery
+## The 15 requested websites
 
-These sources are covered through Google Alerts RSS feeds you create, optional SerpApi Google searches, or both. The monitor reads the RSS/API outputs only; it does not scrape Google result pages or the target sites.
-
-| Source | Recommended method | Notes |
+| Website | Connection | Status in shipped configuration |
 |---|---|---|
-| LinkedIn Jobs | Google Alerts RSS / optional SerpApi | Direct automated access commonly requires account/session controls. |
-| Indeed Canada | Google Alerts RSS / optional SerpApi | Use `site:ca.indeed.com/viewjob` queries. |
-| ZipRecruiter | Google Alerts RSS / optional SerpApi | Search-result snippets may need manual review. |
-| Simplify Jobs | Google Alerts RSS / optional SerpApi | Good fit for new-grad searches. |
-| Glassdoor | Google Alerts RSS / optional SerpApi | Direct scraping is not used. |
-| Wellfound | Google Alerts RSS / optional SerpApi | Prefer company board links when found. |
-| Y Combinator Jobs | Google Alerts RSS / optional SerpApi | Separate from HN Who Is Hiring. |
-| Work at a Startup | Google Alerts RSS / optional SerpApi | Configure targeted alerts. |
-| Canada Job Bank | Google Alerts RSS / optional SerpApi | Add direct API only if a documented public API is configured later. |
-| TechJobs.ca | Google Alerts RSS / optional SerpApi | Configure targeted alerts. |
-| Communitech Jobs | Google Alerts RSS / optional SerpApi | Configure targeted alerts. |
-| Eluta.ca | Google Alerts RSS / optional SerpApi | Configure targeted alerts. |
-| Google Jobs | Cross-web Google Alerts / optional SerpApi | Google Jobs is a search UI, not a public feed. |
-| Dice | Google Alerts RSS / optional SerpApi | Configure targeted alerts. |
+| LinkedIn | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_LINKEDIN |
+| Indeed Canada | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_INDEED |
+| ZipRecruiter | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_ZIPRECRUITER |
+| Simplify | Publisher-maintained public GitHub list | Live verified; enabled |
+| Glassdoor | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_GLASSDOOR |
+| Wellfound | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_WELLFOUND |
+| Y Combinator Jobs | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_YCOMBINATOR |
+| Work at a Startup | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_WORKATASTARTUP |
+| Canada Job Bank | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_JOBBANK |
+| TechJobs.ca | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_TECHJOBSCA |
+| Communitech | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_COMMUNITECH |
+| Eluta | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_ELUTA |
+| Google Jobs | Cross-web Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_GOOGLEJOBS; not the Google Jobs UI |
+| Dice | Google Alerts RSS | Waiting for GOOGLE_ALERT_RSS_DICE |
+| Hacker News Who Is Hiring | HN Algolia API | Live verified; enabled |
 
-The Job Hub source-health table reports configured sources that returned data or failed during persistent monitor runs. A mocked test passing does not mean a live external source is healthy.
+Each RSS secret is mapped by the workflow. Until you create and add the
+corresponding Google Alert feed, that source is not connected. Logs explicitly
+report missing feed configuration. Optional SerpApi remains disabled.
 
-## Manual Configuration Required
+## Date and eligibility handling
 
-- Google Alerts RSS URLs are account-specific and must be added to `config.yaml` or GitHub Actions secrets.
-- SerpApi is optional, paid or quota-limited, and disabled by default.
-- Company boards for Greenhouse, Lever, and Ashby require board tokens/slugs.
-- Supabase requires a Postgres connection string in `DATABASE_URL` or `SUPABASE_DB_URL`.
-- Telegram requires `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`.
+Greenhouse update timestamps are not publication dates. Publication remains
+unknown unless `first_published` is supplied. Lever qualification sections are
+included in description analysis. Unknown Canadian eligibility is excluded by
+default; snippets that mention Canada still require manual verification.
 
-## Unsupported Claims
+## References
 
-The system does not claim comprehensive coverage of all postings on LinkedIn, Indeed, Glassdoor, Google Jobs, or other restricted sites. It reports what configured permitted feeds/APIs return, marks unknown publication dates as unknown, and uses the first discovery time only as a monitoring timestamp.
+- [Greenhouse public Job Board API](https://docs.greenhouse.io/job-board)
+- [Lever public Postings API](https://github.com/lever/postings-api)
+- [Ashby public job posting API](https://developers.ashbyhq.com/docs/public-job-posting-api)
+- [Simplify public new-grad list](https://github.com/SimplifyJobs/New-Grad-Positions)
+- [Simplify recommended resources](https://help.simplify.jobs/help/articles/1517186-more-job-resources)
+
+Google Alerts depends on indexing and may miss postings. No login, CAPTCHA,
+or access restrictions are bypassed.
