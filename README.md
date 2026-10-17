@@ -178,6 +178,19 @@ Important privacy note: standard GitHub Pages sites may be public depending on y
 
 ## Persistence and Deduplication
 
+The Job Hub has Recent, Saved, Applied, Date unknown, and All jobs views.
+Use the bookmark to save a role and the checkmark to record an application;
+opening Apply does not mark it applied. An Undo action is available after changes.
+Saved and Applied are local to the browser and device, survive page refreshes,
+and are not stored in GitHub, Supabase, or the public page. Clearing browser
+storage removes them. Desktop filters are visible above the list; on mobile,
+the filter icon reveals source and match controls. Click a title or Details for
+the explanation, full location, description, and separate publication/discovery
+timestamps. Source diagnostics are collapsed below the jobs.
+
+The HTML generator bundles local templates and vendored Lucide icons into a
+single page. No CDN, JavaScript build step, or new hosting service is required.
+
 The hub defaults to jobs published within the last seven days, ordered by
 publication time. Choose All dates, Older, or Unknown to inspect the retained
 backlog. Every listing displays publication and first-discovery dates separately.

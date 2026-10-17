@@ -3,169 +3,1369 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
   <title>Canada Job Hub</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #18212f;
-      --muted: #667085;
-      --line: #d9dee7;
-      --panel: #ffffff;
-      --bg: #f5f7fa;
-      --red: #c9273a;
-      --green: #147a5c;
-      --blue: #255f9f;
-      --gold: #a45f08;
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
-    header { border-bottom: 1px solid var(--line); background: #fff; }
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 18px 20px; }
-    .top { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
-    h1 { margin: 0; font-size: 28px; letter-spacing: 0; }
-    .sub { margin-top: 4px; color: var(--muted); font-size: 14px; }
-    .mark { width: 72px; height: 48px; border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(90deg, #fff 0 24%, #c9273a 24% 38%, #fff 38% 62%, #c9273a 62% 76%, #fff 76%); position: relative; }
-    .mark:after { content: ""; position: absolute; left: 27px; top: 13px; width: 18px; height: 22px; background: var(--red); clip-path: polygon(50% 0, 60% 30%, 86% 18%, 72% 45%, 100% 48%, 68% 58%, 82% 86%, 50% 68%, 18% 86%, 32% 58%, 0 48%, 28% 45%, 14% 18%, 40% 30%); }
-    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
-    .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
-    .stat b { display: block; font-size: 22px; }
-    .stat span { color: var(--muted); font-size: 12px; }
-    .controls { display: grid; grid-template-columns: minmax(180px, 1fr) repeat(3, minmax(120px, 160px)); gap: 10px; padding-top: 16px; }
-    input, select { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 10px 11px; color: var(--ink); font: inherit; }
-    main .wrap { padding-top: 18px; }
-    .list { display: grid; gap: 10px; }
-    .health { margin-bottom: 18px; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-    .health h2 { margin: 0; padding: 13px 14px; font-size: 15px; border-bottom: 1px solid var(--line); }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    th { color: var(--muted); font-weight: 650; background: #f9fafb; }
-    tr:last-child td { border-bottom: 0; }
-    .job { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--blue); border-radius: 8px; padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 12px; }
-    .job.high { border-left-color: var(--green); }
-    .job.review { border-left-color: var(--gold); }
-    .title { font-size: 16px; font-weight: 750; margin: 0 0 4px; line-height: 1.35; }
-    .meta { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px; }
-    .why { margin-top: 10px; color: #344054; font-size: 13px; line-height: 1.45; }
-    .skills { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-    .pill { border: 1px solid var(--line); border-radius: 999px; padding: 4px 8px; font-size: 12px; background: #f9fafb; color: #344054; }
-    .score { min-width: 88px; text-align: right; }
-    .score b { font-size: 24px; display: block; }
-    .score span { color: var(--muted); font-size: 12px; }
-    .apply { display: inline-block; margin-top: 10px; color: #fff; background: var(--ink); text-decoration: none; padding: 8px 11px; border-radius: 8px; font-weight: 650; font-size: 13px; }
-    .empty { background: #fff; border: 1px dashed var(--line); border-radius: 8px; padding: 30px; text-align: center; color: var(--muted); }
-    footer { color: var(--muted); font-size: 12px; padding: 18px 20px 36px; text-align: center; }
-    @media (max-width: 780px) {
-      .top, .job { grid-template-columns: 1fr; }
-      .mark { display: none; }
-      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .controls { grid-template-columns: 1fr; }
-      .score { text-align: left; }
-    }
-  </style>
+  <style>:root {
+  color-scheme: light;
+  --ink: #202526;
+  --muted: #626a6a;
+  --line: #e1e6e4;
+  --surface: #f5f7f6;
+  --green: #167451;
+  --green-light: #edf7f1;
+  --red: #bf3545;
+  --amber: #96600f;
+  --white: #fff;
+}
+* {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--ink);
+  font:
+    14px/1.5 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+summary {
+  cursor: pointer;
+}
+button,
+a {
+  touch-action: manipulation;
+}
+button {
+  color: inherit;
+}
+button:disabled {
+  cursor: default;
+}
+a {
+  color: inherit;
+}
+svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex-shrink: 0;
+}
+button {
+  border: 0;
+  background: transparent;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #3e82b7;
+  outline-offset: 3px;
+}
+[hidden] {
+  display: none !important;
+}
+.shell {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+  padding-inline: 32px;
+}
+.masthead {
+  border-bottom: 1px solid var(--line);
+}
+.masthead-inner {
+  min-height: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 18px;
+}
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: #faeef0;
+  border-radius: 6px;
+  color: var(--red);
+}
+.brand strong {
+  font-weight: 700;
+}
+.updated {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+.icon-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+.icon-button:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.heading-band {
+  padding-block: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.eyebrow {
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.25;
+  font-weight: 650;
+}
+h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+}
+.quick-count {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.quick-count > span {
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 650;
+  color: var(--green);
+}
+.views {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.view {
+  white-space: nowrap;
+  min-height: 52px;
+  padding: 0 0 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-weight: 550;
+}
+.view.active {
+  border-bottom-color: var(--green);
+  color: var(--ink);
+  font-weight: 650;
+}
+.view > span {
+  font-size: 11px;
+  min-width: 20px;
+  line-height: 20px;
+  padding: 0 5px;
+  text-align: center;
+  background: var(--surface);
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.view.active > span {
+  background: var(--green-light);
+  color: var(--green);
+}
+.filters {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 140px 170px 140px 120px;
+  gap: 16px;
+  align-items: end;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid #cbd3ce;
+  border-radius: 6px;
+  min-height: 44px;
+  padding: 0 12px;
+  color: var(--muted);
+}
+.search:focus-within {
+  outline: 2px solid #3e82b7;
+  outline-offset: 2px;
+}
+.search input {
+  border: 0;
+  outline: 0;
+  min-width: 0;
+  width: 100%;
+  height: 42px;
+  background: transparent;
+  color: var(--ink);
+}
+input::placeholder {
+  color: var(--muted);
+}
+.filter-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 550;
+}
+select {
+  color: var(--ink);
+  min-height: 44px;
+  border: 1px solid #cbd3ce;
+  border-radius: 6px;
+  padding: 0 24px 0 10px;
+  background: var(--white);
+  width: 100%;
+  font-size: 13px;
+}
+.results-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-block: 24px 16px;
+}
+.results-bar > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#results-count {
+  font-size: 12px;
+  color: var(--muted);
+}
+.sort-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.sort-label select {
+  border: 0;
+  width: 152px;
+  background: var(--surface);
+  min-height: 36px;
+}
+.list-head,
+.job-row {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(
+      140px,
+      180px
+    ) 112px 72px 168px;
+  gap: 16px;
+  align-items: center;
+}
+.list-head {
+  padding: 12px 16px;
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface);
+  border-block: 1px solid var(--line);
+  font-weight: 600;
+}
+.job {
+  border-bottom: 1px solid var(--line);
+}
+.job-row {
+  padding: 20px 16px;
+  min-height: 116px;
+}
+.job:hover {
+  background: #fbfcfb;
+}
+.role-column {
+  min-width: 0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.company-avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #4c6057;
+}
+.role-text {
+  min-width: 0;
+}
+.job-title {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.45;
+  display: block;
+  text-align: left;
+  padding: 0;
+  margin: 0 0 4px;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+.job-title:hover {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.company-line {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--muted);
+}
+.job-status {
+  color: var(--green);
+  font-size: 11px;
+}
+.location-text {
+  font-size: 12px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.subtext {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.posted {
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.45;
+}
+.posted.unknown {
+  color: var(--amber);
+}
+.match-value {
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.match-value.high {
+  color: var(--green);
+}
+.match-value small {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.match-bar {
+  height: 3px;
+  width: 48px;
+  background: #e5ebe7;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.match-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--green);
+}
+.row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.apply {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 10px;
+  height: 36px;
+  border: 1px solid #cbd3ce;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--white);
+}
+.apply:hover {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--white);
+}
+.row-actions .icon-button {
+  width: 36px;
+  height: 36px;
+}
+.icon-button.is-active {
+  color: var(--green);
+  background: var(--green-light);
+}
+.job-detail {
+  padding: 0 16px 16px 64px;
+}
+.detail-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 0;
+  min-height: 24px;
+}
+.detail-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+.detail-body {
+  padding-top: 16px;
+  max-width: 850px;
+  font-size: 13px;
+}
+.detail-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.detail-facts strong {
+  font-weight: 550;
+  color: var(--ink);
+}
+.detail-body h3 {
+  font-size: 12px;
+  margin: 16px 0 8px;
+}
+.detail-body p {
+  margin: 0 0 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-block: 12px;
+}
+.skill {
+  padding: 3px 8px;
+  background: var(--surface);
+  font-size: 11px;
+  border-radius: 4px;
+}
+.description {
+  max-height: 280px;
+  overflow-y: auto;
+  white-space: pre-line;
+  border-left: 2px solid var(--line);
+  padding-left: 16px;
+}
+.empty {
+  padding: 48px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+.empty > span {
+  display: inline-flex;
+  margin-bottom: 16px;
+  color: var(--muted);
+}
+.empty > span svg {
+  width: 32px;
+  height: 32px;
+}
+.empty p {
+  color: var(--muted);
+  max-width: 420px;
+  margin: 12px auto 24px;
+  font-size: 13px;
+}
+.secondary {
+  padding: 8px 16px;
+  border: 1px solid #cbd3ce;
+  border-radius: 6px;
+  font-size: 12px;
+  min-height: 40px;
+}
+.text-button {
+  padding: 8px 12px;
+  color: var(--green);
+  font-size: 12px;
+  min-height: 40px;
+}
+.source-health {
+  margin-top: 40px;
+  border-block: 1px solid var(--line);
+}
+.source-health summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 550;
+}
+.source-health summary::-webkit-details-marker {
+  display: none;
+}
+.source-health summary > span:first-child {
+  color: var(--green);
+}
+#health-summary {
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.chevron {
+  margin-left: auto;
+  color: var(--muted);
+}
+.source-health[open] .chevron svg {
+  transform: rotate(180deg);
+}
+.table-scroll {
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+  text-align: left;
+}
+th {
+  color: var(--muted);
+  font-weight: 500;
+  background: var(--surface);
+}
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.health-good {
+  color: var(--green);
+}
+.health-bad {
+  color: #ac293b;
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-block: 20px 40px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--white);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px #0002;
+  max-width: calc(100% - 32px);
+  z-index: 10;
+  font-size: 13px;
+}
+.toast button {
+  color: #9ee3bc;
+  font-weight: 650;
+  min-height: 32px;
+}
+.sr-only,
+.skip:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip:focus {
+  display: block;
+  padding: 12px;
+}
+.job-row {
+  min-height: 88px;
+  padding-block: 16px;
+}
+.search-group {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+.search-group .search {
+  flex: 1;
+  min-width: 0;
+}
+.filter-more {
+  display: none;
+}
+.extra-filters {
+  display: contents;
+}
+.filters > * {
+  min-width: 0;
+}
+select {
+  min-width: 0;
+}
+.load-more {
+  display: block;
+  margin: 24px auto;
+}
+@media (min-width: 1500px) {
+  .shell {
+    padding-inline: 48px;
+  }
+}
+@media (max-width: 1100px) {
+  .filters {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .search {
+    grid-column: 1/-1;
+  }
+  .list-head,
+  .job-row {
+    grid-template-columns: minmax(190px, 1fr) 140px 100px 64px 152px;
+    gap: 12px;
+  }
+  .shell {
+    padding-inline: 24px;
+  }
+}
+@media (max-width: 800px) {
+  .list-head {
+    display: none;
+  }
+  .job-row {
+    grid-template-columns: minmax(0, 1fr) 112px;
+    gap: 12px;
+    padding: 20px 0 8px;
+  }
+  .role-column {
+    grid-column: 1/2;
+  }
+  .location-column {
+    grid-column: 1/2;
+    padding-left: 48px;
+  }
+  .date-column {
+    grid-column: 1/2;
+    padding-left: 48px;
+  }
+  .match-column {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .row-actions {
+    grid-column: 2;
+    grid-row: 1;
+    width: 112px;
+    display: grid;
+    grid-template-columns: 36px 36px;
+    justify-content: end;
+    gap: 4px;
+  }
+  .apply {
+    grid-column: 1/3;
+    grid-row: 2;
+    height: 36px;
+  }
+  .job-detail {
+    padding-left: 48px;
+  }
+  .location-text {
+    -webkit-line-clamp: 3;
+  }
+  .date-column {
+    padding-top: 0;
+  }
+  .date-column .subtext {
+    display: none;
+  }
+  .posted {
+    font-size: 11px;
+  }
+  .company-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  .filters {
+    gap: 12px;
+  }
+  .heading-band {
+    padding-block: 24px;
+  }
+  .quick-count {
+    display: none;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  .results-bar {
+    align-items: flex-start;
+  }
+  .results-bar > div {
+    gap: 4px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .views {
+    gap: 24px;
+  }
+  #health-summary {
+    margin-left: 0;
+    font-size: 11px;
+  }
+}
+@media (max-width: 540px) {
+  .shell {
+    padding-inline: 16px;
+  }
+  .brand {
+    font-size: 16px;
+    gap: 8px;
+  }
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+  .updated {
+    gap: 4px;
+    font-size: 10px;
+  }
+  .updated .status-dot {
+    display: none;
+  }
+  .updated .icon-button {
+    width: 32px;
+    height: 36px;
+  }
+  .masthead-inner {
+    min-height: 64px;
+    gap: 8px;
+  }
+  .eyebrow {
+    font-size: 10px;
+  }
+  h1 {
+    font-size: 22px;
+  }
+  .filters {
+    grid-template-columns: 1fr 1fr;
+    padding-block: 16px;
+  }
+  .views {
+    gap: 20px;
+  }
+  .view {
+    font-size: 12px;
+  }
+  .job-title {
+    font-size: 13px;
+  }
+  .job-row {
+    grid-template-columns: minmax(0, 1fr) 88px;
+    gap: 8px;
+  }
+  .row-actions {
+    width: 88px;
+  }
+  .location-column,
+  .date-column,
+  .job-detail {
+    padding-left: 0;
+  }
+  .location-column {
+    padding-top: 4px;
+  }
+  .sort-label {
+    font-size: 0;
+  }
+  .sort-label select {
+    width: 144px;
+    font-size: 12px;
+  }
+  .company-line {
+    font-size: 11px;
+  }
+  .company-avatar {
+    display: none;
+  }
+  .source-health summary {
+    flex-wrap: wrap;
+  }
+  .source-health summary .chevron {
+    margin-left: auto;
+  }
+  #health-summary {
+    max-width: 45%;
+  }
+  .toast {
+    width: max-content;
+  }
+  .detail-facts {
+    display: grid;
+    gap: 8px;
+  }
+}
+@media (max-width: 1100px) {
+  .search-group {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 540px) {
+  .filter-more {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #cbd3ce;
+    flex-shrink: 0;
+  }
+  .extra-filters {
+    display: none;
+  }
+  .filters[data-expanded="true"] .extra-filters {
+    display: contents;
+  }
+  .row-actions .icon-button {
+    width: 44px;
+    height: 44px;
+  }
+  .row-actions {
+    width: 96px;
+    grid-template-columns: 44px 44px;
+  }
+  .job-row {
+    grid-template-columns: minmax(0, 1fr) 96px;
+  }
+  .apply {
+    min-height: 44px;
+  }
+}
+</style>
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <div class="top">
-        <div>
-          <h1>Canada Job Hub</h1>
-          <div class="sub">Latest matched software roles from your monitor. Generated 2026-10-17 01:29 UTC.</div>
-        </div>
-        <div class="mark" aria-hidden="true"></div>
-      </div>
-      <section class="stats" aria-label="Job summary">
-        <div class="stat"><b id="total">0</b><span>Matched jobs</span></div>
-        <div class="stat"><b id="fresh">0</b><span>Published in 24h</span></div>
-        <div class="stat"><b id="high">0</b><span>Score 75+</span></div>
-        <div class="stat"><b id="review">0</b><span>Needs location review</span></div>
-      </section>
-      <section class="controls" aria-label="Filters">
-        <input id="search" placeholder="Search company, title, skill, location">
-        <select id="freshness">
-          <option value="last7" selected>Posted in last 7 days</option>
-          <option value="">All dates</option>
-          <option value="fresh">24 hours</option>
-          <option value="recent">3 days</option>
-          <option value="week">7 days</option>
-          <option value="older">Older</option>
-          <option value="unknown">Unknown</option>
-        </select>
-        <select id="source"><option value="">All sources</option></select>
-        <select id="score">
-          <option value="0">Any score</option>
-          <option value="60">60+</option>
-          <option value="75">75+</option>
-          <option value="90">90+</option>
-        </select>
-      </section>
+  <a class="skip" href="#jobs-heading">Skip to jobs</a>
+  <header class="masthead">
+    <div class="shell masthead-inner">
+      <div class="brand"><span class="brand-mark" data-icon="briefcase-business" aria-hidden="true"></span><span>Canada <strong>Job Hub</strong></span></div>
+      <div class="updated"><span class="status-dot"></span><span>Updated <time id="updated" datetime="2026-10-17T01:39:51.648336+00:00"></time></span><button id="refresh" class="icon-button" aria-label="Refresh jobs" title="Refresh jobs"><span data-icon="refresh-cw"></span></button></div>
     </div>
   </header>
-  <main><div class="wrap"><section id="health" class="health"></section><section id="list" class="list"></section></div></main>
-  <footer>Publication dates are source-provided when available. Unknown dates are not assumed to be recent.</footer>
-  <script>
-    const jobs = [{"company": "Ciena", "title": "Embedded Software Developer New Grad", "location": "Ottawa, ON, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://ciena.wd5.myworkdayjobs.com/Careers/job/Ottawa/Embedded-Software-Developer--New-Grad-_R031481", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.286859+00:00", "lastSeen": "2026-10-17T01:24:26.475041+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Ciena", "title": "Embedded Software Engineer New Grad", "location": "Ottawa, ON, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://ciena.wd5.myworkdayjobs.com/Careers/job/Ottawa/Embedded-Software-Engineer---New-Grad_R031571", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.286822+00:00", "lastSeen": "2026-10-17T01:24:26.475002+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Quora", "title": "Software Engineer New Grad - Machine Learning Platform", "location": "Remote in USA Remote in Canada", "workplace": "Remote", "source": "simplify", "url": "https://jobs.ashbyhq.com/quora/cf34f80e-fe5c-454d-bc9a-4c59993ffda0/application?embed=true", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.283865+00:00", "lastSeen": "2026-10-17T01:24:26.471824+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Cerebras", "title": "Software Engineer New Grad", "location": "Toronto, ON, Canada Sunnyvale, CA", "workplace": "Not stated", "source": "simplify", "url": "https://jobs.ashbyhq.com/cerebras/99c289fa-8fc6-49f7-b7e8-78ac4e9d99ac/application", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.282608+00:00", "lastSeen": "2026-10-17T01:24:26.470408+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "🔥 Stripe", "title": "Software Engineer New Grad", "location": "Toronto, ON, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://stripe.com/jobs/search?gh_jid=8157838", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280626+00:00", "lastSeen": "2026-10-17T01:24:26.468251+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "🔥 Atlassian", "title": "Software Engineer New Grad - 2027 Graduate", "location": "Burnaby, BC, Canada Vancouver, BC, Canada Richmond, BC, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://campus-globalcareers-atlassian.icims.com/jobs/26070/software-engineer%2c-2027-graduate-canada/job", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280335+00:00", "lastSeen": "2026-10-17T01:24:26.467918+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Affirm", "title": "Software Engineer 1 - Frontend - Upfunnel", "location": "Remote in Canada", "workplace": "Remote", "source": "simplify", "url": "https://job-boards.greenhouse.io/affirm/jobs/7985907003", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280284+00:00", "lastSeen": "2026-10-17T01:24:26.467837+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Nexthop.ai", "title": "Software Engineer New Grad", "location": "Burnaby, BC, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://nexthopai.bamboohr.com/careers/62", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280160+00:00", "lastSeen": "2026-10-17T01:24:26.467716+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Tower Research Capital", "title": "C++ Software Developer New Grad - Rotational Program", "location": "Montreal, QC, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://tower-research.com/open-positions?gh_jid=8126667", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280147+00:00", "lastSeen": "2026-10-17T01:24:26.467701+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Nutanix", "title": "Software Engineer New Grad - Master’s - Bachelor’s + 2 🎓", "location": "Vancouver, BC, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://jobs.jobvite.com/nutanix/job/oZPOAfwW?nl=1&nl=1&fr=false", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.279484+00:00", "lastSeen": "2026-10-17T01:24:26.467040+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Motorola", "title": "Junior Software Engineer - AI Agent Platform", "location": "Remote in Canada", "workplace": "Remote", "source": "simplify", "url": "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Ontario-Remote-Work/Jr-Software-Engineer--AI-Agent-Platform_R66300", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.279285+00:00", "lastSeen": "2026-10-17T01:24:26.466753+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Ecolab", "title": "Junior Quality Control Software Developer", "location": "Calgary, AB, Canada", "workplace": "Not stated", "source": "simplify", "url": "https://ecolab.wd1.myworkdayjobs.com/ecolab_external/job/CAN---Alberta---Calgary/Junior-Quality-Control-Software-Developer_R00307033", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.278852+00:00", "lastSeen": "2026-10-17T01:24:26.466327+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "Affirm", "title": "Software Engineer 1 - Fullstack - Search", "location": "Remote in Canada", "workplace": "Remote", "source": "simplify", "url": "https://job-boards.greenhouse.io/affirm/jobs/8017342003", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.278046+00:00", "lastSeen": "2026-10-17T01:24:26.465452+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown"}, {"company": "1Password", "title": "Junior Developer", "location": "Remote (United States | Canada), Remote", "workplace": "Remote", "source": "ashby", "url": "https://jobs.ashbyhq.com/1password/a492badd-a02f-4360-aa15-7ea8c6e2c85e", "score": 78, "why": "role title matches target software roles; experience requirement is within configured range; location explicitly matches Canada targets; technical skills detected: go", "skills": "go", "published": "2026-10-15T19:57:41.748000+00:00", "firstSeen": "2026-10-17T00:56:21.275392+00:00", "lastSeen": "2026-10-17T01:24:26.463008+00:00", "notified": true, "freshness": "Published within 3 days", "freshnessGroup": "recent"}, {"company": "1Password", "title": "Developer, Frontend", "location": "Remote (United States | Canada), Remote", "workplace": "Remote", "source": "ashby", "url": "https://jobs.ashbyhq.com/1password/ec030dda-caff-4579-93ab-c9aa147a0241", "score": 84, "why": "role title matches target software roles; experience requirement is within configured range; location explicitly matches Canada targets; technical skills detected: typescript, react, go", "skills": "typescript, react, go", "published": "2026-09-11T22:31:08.441000+00:00", "firstSeen": "2026-10-17T00:56:21.274895+00:00", "lastSeen": "2026-10-17T01:24:26.462545+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Cohere", "title": "Software Engineer, Security", "location": "Toronto, San Francisco, Canada, United States, New York, Montreal, Remote", "workplace": "Remote", "source": "ashby", "url": "https://jobs.ashbyhq.com/cohere/a10a96b5-f772-466d-9297-f021f78ca9c0", "score": 78, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, aws, azure, kubernetes, go", "skills": "python, aws, azure, kubernetes, go", "published": "2026-09-17T19:46:04.566000+00:00", "firstSeen": "2026-10-17T00:56:21.271987+00:00", "lastSeen": "2026-10-17T01:24:26.459976+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Cohere", "title": "Software Engineer, Security Agents", "location": "United States, Canada, Remote", "workplace": "Remote", "source": "ashby", "url": "https://jobs.ashbyhq.com/cohere/1b909aeb-1221-476f-88fe-8300a2065975", "score": 69, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, go", "skills": "python, go", "published": "2026-09-14T13:15:03.461000+00:00", "firstSeen": "2026-10-17T00:56:21.271882+00:00", "lastSeen": "2026-10-17T01:24:26.459849+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Cohere", "title": "Software Engineer, Integrations", "location": "Europe, London, United States, New York, United Kingdom, Toronto, Montreal, Remote", "workplace": "Remote", "source": "ashby", "url": "https://jobs.ashbyhq.com/cohere/96c74af4-b3d7-4960-a666-212ce4debac8", "score": 66, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: go", "skills": "go", "published": "2026-08-11T10:41:22.845000+00:00", "firstSeen": "2026-10-17T00:56:21.271076+00:00", "lastSeen": "2026-10-17T01:24:26.459094+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Cohere", "title": "Software Engineer, Data Infrastructure", "location": "New York, San Francisco, Canada, United States, Toronto, Montreal, Remote", "workplace": "Remote", "source": "ashby", "url": "https://jobs.ashbyhq.com/cohere/6aa3cb2b-ee8b-4c92-b505-3a7509f80d7f", "score": 72, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, kubernetes, go", "skills": "python, kubernetes, go", "published": "2026-05-14T19:24:12.210000+00:00", "firstSeen": "2026-10-17T00:56:21.269739+00:00", "lastSeen": "2026-10-17T01:24:26.457757+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Reddit", "title": "Software Engineer, Ads", "location": "Remote - Ontario, Canada", "workplace": "Remote", "source": "greenhouse", "url": "https://job-boards.greenhouse.io/reddit/jobs/6512458", "score": 78, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, java, postgres, docker, kubernetes, go", "skills": "python, java, postgres, docker, kubernetes, go", "published": "2025-01-07T00:00:56+00:00", "firstSeen": "2026-10-17T00:56:21.261159+00:00", "lastSeen": "2026-10-17T01:24:26.446350+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Affirm", "title": "Software Engineer II, Backend (Online Storage)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "url": "https://job-boards.greenhouse.io/affirm/jobs/8012043003", "score": 87, "why": "role title matches target software roles; experience requirement is within configured range; location explicitly matches Canada targets; technical skills detected: python, sql, aws, kubernetes", "skills": "python, sql, aws, kubernetes", "published": "2026-10-08T19:53:50+00:00", "firstSeen": "2026-10-17T00:56:21.255393+00:00", "lastSeen": "2026-10-17T01:24:26.442421+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Affirm", "title": "Software Engineer II, Backend (Decisions Orchestration)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "url": "https://job-boards.greenhouse.io/affirm/jobs/8003018003", "score": 75, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, sql, aws, go", "skills": "python, sql, aws, go", "published": "2026-10-06T13:57:16+00:00", "firstSeen": "2026-10-17T00:56:21.255282+00:00", "lastSeen": "2026-10-17T01:24:26.442293+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "Affirm", "title": "Software Engineer I, Fullstack (Search)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "url": "https://job-boards.greenhouse.io/affirm/jobs/8017342003", "score": 92, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets; technical skills detected: python, javascript, typescript, java, go", "skills": "python, javascript, typescript, java, go", "published": "2026-10-15T21:31:11+00:00", "firstSeen": "2026-10-17T00:56:21.255173+00:00", "lastSeen": "2026-10-17T01:24:26.442127+00:00", "notified": true, "freshness": "Published within 3 days", "freshnessGroup": "recent"}, {"company": "Affirm", "title": "Software Engineer I, Frontend (Upfunnel)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "url": "https://job-boards.greenhouse.io/affirm/jobs/7985907003", "score": 92, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets; technical skills detected: javascript, typescript, react, java, go", "skills": "javascript, typescript, react, java, go", "published": "2026-09-11T21:47:40+00:00", "firstSeen": "2026-10-17T00:56:21.255153+00:00", "lastSeen": "2026-10-17T01:24:26.442096+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}, {"company": "HN Who is Hiring", "title": "Early-stage Startup | Software Engineer & Data Analyst | Full-Time | REMOTE (US & Canada) | $150,000 - $180,000 USD We’re hiring for two roles: a strong generalist Softwa", "location": "Location not stated", "workplace": "Remote", "source": "hackernews", "url": "https://news.ycombinator.com/item?id=49971729", "score": 56, "why": "role title matches target software roles; experience requirement not clearly stated; REVIEW: location inferred from title/snippet/description; technical skills detected: python, sql", "skills": "python, sql", "published": "2026-10-05T22:31:30+00:00", "firstSeen": "2026-10-13T23:23:07.036979+00:00", "lastSeen": "2026-10-17T01:24:26.480097+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older"}];
-    const health = [{"source": "ashby", "status": "working", "type": "direct", "jobs": 261, "matches": 6, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "lastError": "", "quota": "ok"}, {"source": "greenhouse", "status": "working", "type": "direct", "jobs": 360, "matches": 5, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "lastError": "", "quota": "ok"}, {"source": "hackernews", "status": "working", "type": "direct", "jobs": 90, "matches": 1, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "lastError": "", "quota": "ok"}, {"source": "lever", "status": "working", "type": "direct", "jobs": 79, "matches": 0, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "lastError": "", "quota": "ok"}, {"source": "simplify", "status": "working", "type": "indirect", "jobs": 545, "matches": 13, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "lastError": "", "quota": "ok"}];
-    const list = document.getElementById('list');
-    const source = document.getElementById('source');
-    const controls = ['search', 'freshness', 'source', 'score'].map(id => document.getElementById(id));
+  <main class="shell">
+    <section class="heading-band" aria-labelledby="jobs-heading">
+      <div><div class="eyebrow">YOUR APPLICATION DESK</div><h1 id="jobs-heading">Your job shortlist.</h1></div>
+      <div class="quick-count"><span id="recent-count">0</span><div>posted in the<br>last 7 days</div></div>
+    </section>
+    <nav class="views" aria-label="Job views">
+      <button class="view active" data-view="recent" aria-current="page">Recent <span id="count-recent">0</span></button>
+      <button class="view" data-view="saved">Saved <span id="count-saved">0</span></button>
+      <button class="view" data-view="applied">Applied <span id="count-applied">0</span></button>
+      <button class="view" data-view="undated">Date unknown <span id="count-undated">0</span></button>
+      <button class="view" data-view="all">All jobs <span id="count-all">0</span></button>
+    </nav>
+    <section class="filters" aria-label="Job filters">
+      <div class="search-group"><label class="search"><span data-icon="search" aria-hidden="true"></span><input id="search" type="search" aria-label="Search jobs" placeholder="Search role, company or skill" autocomplete="off"></label><button id="filter-more" class="icon-button filter-more" aria-label="More filters" title="Source and match filters" aria-controls="extra-filters" aria-expanded="false"><span data-icon="sliders-horizontal" aria-hidden="true"></span></button></div>
+      <label class="filter-label">Posted<select id="freshness"><option value="last7" selected>Last 7 days</option><option value="fresh">Last 24 hours</option><option value="recent">Last 3 days</option><option value="">Any date</option><option value="unknown">Date unknown</option><option value="older">Older than 7 days</option></select></label>
+      <label class="filter-label">Location<select id="location"><option value="">Canada (all)</option><option value="bc">Vancouver / BC</option><option value="remote">Remote</option></select></label>
+      <div id="extra-filters" class="extra-filters"><label class="filter-label">Source<select id="source"><option value="">All sources</option></select></label>
+      <label class="filter-label">Match<select id="score"><option value="0">Any score</option><option value="75">75+ match</option><option value="90">90+ match</option></select></label></div>
+    </section>
+    <div class="results-bar"><div><h2 id="view-title">Recent opportunities</h2><span id="results-count" role="status" aria-live="polite"></span></div><label class="sort-label">Sort by <select id="sort" aria-label="Sort jobs"><option value="newest">Newest posted</option><option value="match">Best match</option><option value="discovered">Latest discovered</option></select></label></div>
+    <div class="list-head" aria-hidden="true"><span>ROLE / COMPANY</span><span>LOCATION</span><span>POSTED</span><span>MATCH</span><span></span></div>
+    <section id="list" aria-label="Matching jobs"></section>
+    <div id="empty" class="empty" hidden><span data-icon="inbox" aria-hidden="true"></span><h2 id="empty-title">No recent matches yet</h2><p id="empty-copy"></p><button id="reset" class="secondary">Reset filters</button><button id="show-undated" class="text-button">View jobs with unknown dates</button></div>
+    <details id="source-health" class="source-health"><summary><span data-icon="circle-check" aria-hidden="true"></span>Source activity <span id="health-summary"></span><span class="chevron" data-icon="chevron-down"></span></summary><div class="table-scroll"><table><caption class="sr-only">Recorded source checks</caption><thead><tr><th>Source</th><th>Status</th><th>Listings</th><th>Matches</th><th>Last successful check</th></tr></thead><tbody id="health"></tbody></table></div></details>
+    <footer><span>Publication dates stay separate from discovery dates.</span><span id="storage-note">Saved and Applied stay in this browser.</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toast-text"></span><button id="undo">Undo</button></div>
+  <noscript><p class="shell">Enable JavaScript to search and filter your jobs.</p></noscript>
+  <script id="job-data" type="application/json">[{"id": "d7bde6d18640d28089683b8c", "company": "1Password", "title": "Junior Developer", "location": "Remote (United States | Canada), Remote", "workplace": "Remote", "source": "ashby", "sources": ["ashby"], "url": "https://jobs.ashbyhq.com/1password/a492badd-a02f-4360-aa15-7ea8c6e2c85e", "score": 78, "why": "role title matches target software roles; experience requirement is within configured range; location explicitly matches Canada targets; technical skills detected: go", "skills": "go", "published": "2026-10-15T19:57:41.748000+00:00", "firstSeen": "2026-10-17T00:56:21.275392+00:00", "lastSeen": "2026-10-17T01:24:26.463008+00:00", "notified": true, "freshness": "Published within 3 days", "freshnessGroup": "recent", "description": "1Password is growing. We\u2019ve surpassed $400M in ARR and we\u2019re continuing to accelerate, earning a spot on the Forbes Cloud 100 for four years in a row and teaming up with iconic partners like Oracle Red Bull Racing. About 1Password At 1Password, we\u2019re building the foundation for a safe, productive digital future. Our mission is to unleash employee productivity without compromising security by ensuring every identity is authentic, every application sign-in is secure, and every device is trusted. We innovated the market-leading enterprise password manager and pioneered Unified Access Management, a new cybersecurity category built for the way people and AI agents work today. As one of the most loved brands in cybersecurity, we take a human-centric approach in everything from product strategy to user experience. Over 180,000 businesses, from Fortune 100 leaders to the world\u2019s most innovative AI companies, trust 1Password to help their teams securely adopt the SaaS and AI tools they need to do their best work. If you're excited about the opportunity to contribute to the digital safety of millions, to work alongside a team of curious, driven individuals, and to solve hard problems in a fast-paced, dynamic environment, then we want to hear from you. Come join us and help shape a safer, simpler digital future. We are excited to welcome a Software Developer to join our new Data Security team here at 1Password, whose mission is to safeguard 1Password\u2019s foundation by designing, implementing, and maintaining cryptographic systems and practices that ensure the confidentiality, integrity, and availability of information across our products. As part of our Security Department, the Developer will be partially responsible for the underlying cryptography across our products. You\u2019ll build cryptographic libraries and implement the latest algorithms directly into our client applications with security, performance and usability in mind. You\u2019ll develop proof-of-concepts and implement new industry specifications into code. You\u2019ll also conduct code and design reviews to ensure good cryptographic hygiene and standards across our codebase. How we\u2019re using AI today Our Engineering, Product, and Design teams are thoughtfully integrating AI across the full software and product development lifecycle to move faster without sacrificing quality or security. In practice, that looks like engineers using AI-assisted coding tools to accelerate reviews and catch bugs earlier, product managers synthesizing user research at scale, and designers rapidly prototyping and iterating with AI-generated mockups. We approach AI the same way we approach security: with clear principles, human accountability at every consequential decision point, and rigorous evaluation before anything ships to customers. This is a remote opportunity within Canada and the US. What we're looking for: - You have 0-2+ years of experience in software development. - You have a passion for and strong experience with security development best practices, coding standards, and design patterns. - You have a basic understanding of modern cryptographic algorithms, trade-offs and implementation considerations gained from real world experience. - You work well in a team environment with positive communications amongst a variety of technical and non-technical stakeholders. - You have proven experience in implementing testing methodologies and debugging techniques to ensure high-quality code. - You\u2019re adaptable and resilient, thriving in fast-paced environments with shifting priorities. Bonus points for: - Experience with implementing industry standards into new libraries or codebases. - Experience with Rust and/or Golang, or a demonstrated ability to pick up new languages quickly. What you can expect: - Work with a small team of security developers who are specialists in Rust and Golang Security. - Develop cryptographic or other security libraries to share common security-critical code across our applications. - Assist in security design efforts or scoping initiatives for new features, particularly with heavy cryptographic components. - Assess and take appropriate steps to resolve new security vulnerabilities across our applications. - Implement new security features for the next generation of 1Password. - Demonstrate leadership in security development and act as a trusted point of contact for management and other developers. - Work with a variety of teams across our hybrid core architecture, including Design, Product and Product Engineering. USA-based roles only: The annual base salary for this role is between $100,000 USD and $140,000 USD, plus immediate participation in 1Password's benefits program (health, dental, 401k and many others), utilization of our generous paid time off, an equity grant and, where applicable, participation in our incentive programs. Canada-based roles only: The annual base salary for this role is between $85,000 CAD and $119,000 CAD, plus immediate participation in 1Password\u2019s generous benefits program (health, dental, RRSP and many others), utilization of our generous paid time off, an equity grant and, where applicable, participation in our incentive programs. At 1Password, we approach each individual's compensation with a promise of fair market value and internal equity commensurate with experience and specific skill set. This posting is for an existing vacancy. Our culture At 1Password, we prioritize collaboration, clear and transparent communication, receptiveness to feedback, and alignment with our core values: keep it simple, lead with honesty, and put people first. You\u2019ll be part of a team that challenges the status quo, and is excited to experiment and iterate in search of the best solution. That said, 1Password is not for everyone https://blog.1password.com/inside-the-culture-powering-1passwords-next-chapter/. Our work is demanding, we strive for excellence, and the pace is fast. We need people who are keen to take on challenging problems, who seek feedback to grow, and who are driven to make an impact. If you're looking for a place where you can settle into a comfortable routine, this might not be the right fit for you. We\u2019re looking for individuals who are proven experts in their fields, as well as those who are highly adaptable, can thrive in ambiguity and through change, are curious, and above all deliver results. How we work with AI We are committed to leveraging cutting-edge technology\u2014including AI\u2014to achieve our mission. We also understand that thinking critically about AI in its current forms will help us create better solutions for our customers and ourselves with its future forms, which will help us continue to close the gap between security and privacy and achieve our mission. We want team members at all levels to take the approach of actively learning AI best practices, identifying opportunities to apply AI in meaningful ways, and driving innovative solutions in their daily work. Embracing the future of AI isn't just encouraged\u2014it's an essential part of how we will be successful at 1Password. This approach extends to our hiring process\u2014candidates are welcome to use AI tools responsibly and thoughtfully during the application process. To us, this means we do ask that you join live interviews without using AI tools so we can get to know how you communicate, solve problems, and collaborate with others. Our approach to remote work We believe in the power of remote work, but recognize that in-person connection is important to help us achieve our mission. While we are a remote-first company, travel for in-person engagement is a part of almost all roles, and we require our employees to be ready and willing to take part. Frequency will depend on role and responsibilities, and may include, but is not limited to: annual department-wide offsites, team meetings, and customer/industry events. What we offer We believe in working hard, and rewarding that hard work through our benefits. While not an exhaustive list, here is a glance at what we currently offer: Health and wellbeing \ud83d\udc76 Maternity and parental leave top-up programs \ud83e\ude7a Competitive health benefits \ud83c\udfdd Generous PTO policy Growth and future \ud83d\udcc8 RSU program for most employees \ud83d\udcb8 Retirement matching program \ud83d\udd11 Free 1Password account Community \ud83e\udd1d Paid volunteer days \ud83c\udfc6 Peer-to-peer recognition through Bonusly \ud83c\udf0e Remote-first work environment *Some roles in our GTM team are currently being hired for in-person hybrid work in Toronto and Austin. These roles will specify on the posting. You belong here. 1Password is proud to be an equal opportunity employer. We are committed to fostering an inclusive, diverse and equitable workplace that is built on trust, support and respect. We welcome all individuals and do not discriminate on the basis of gender identity and expression, race, ethnicity, disability, sexual orientation, colour, religion, creed, gender, national origin, age, marital status, pregnancy, sex, citizenship, education, languages spoken or veteran status. Be yourself, find your people and share the things you love. Accommodation is available upon request at any point during our recruitment process. If you require an accommodation, please speak to your talent acquisition partner or email us at nextbit@agilebits.com and we\u2019ll work to meet your needs. Remote work is a part of our DNA. Given that our company was founded remotely in 2005, we can safely say we're experts at building remote culture. That said, remote work at 1Password does mean working from your home country. If you've got questions or concerns about this, your talent partner would be happy to address them with you. Successful applicants will be required to complete a background check that may consist of prior employment verification, reference checks, education confirmation, criminal background, publicly available social media, credit history, or other information, as permitted by local law. 1Password uses artificial intelligence (AI) and machine learning (ML) technologies, including natural language processing and predictive analytics, to assist in the initial screening of employment applications and improve our recruitment process. See here https://www.ashbyhq.com/downloadables/ashby-bias-audit-08-2024.pdf for the latest third party bias audit information. If you prefer not to have your application assessed using AI/ML features, you may opt out by completing this form https://jobs.ashbyhq.com/1password/automation-notice. For additional information see our Candidate Privacy Notice https://1password.com/files/candidate-privacy-notice.pdf."}, {"id": "2b1a557049926e49e8bf30a6", "company": "1Password", "title": "Developer, Frontend", "location": "Remote (United States | Canada), Remote", "workplace": "Remote", "source": "ashby", "sources": ["ashby"], "url": "https://jobs.ashbyhq.com/1password/ec030dda-caff-4579-93ab-c9aa147a0241", "score": 84, "why": "role title matches target software roles; experience requirement is within configured range; location explicitly matches Canada targets; technical skills detected: typescript, react, go", "skills": "typescript, react, go", "published": "2026-09-11T22:31:08.441000+00:00", "firstSeen": "2026-10-17T00:56:21.274895+00:00", "lastSeen": "2026-10-17T01:24:26.462545+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "1Password is growing. We\u2019ve surpassed $400M in ARR and we\u2019re continuing to accelerate, earning a spot on the Forbes Cloud 100 for four years in a row and teaming up with iconic partners like Oracle Red Bull Racing. About 1Password At 1Password, we\u2019re building the foundation for a safe, productive digital future. Our mission is to unleash employee productivity without compromising security by ensuring every identity is authentic, every application sign-in is secure, and every device is trusted. We innovated the market-leading enterprise password manager and pioneered Unified Access Management, a new cybersecurity category built for the way people and AI agents work today. As one of the most loved brands in cybersecurity, we take a human-centric approach in everything from product strategy to user experience. Over 180,000 businesses, from Fortune 100 leaders to the world\u2019s most innovative AI companies, trust 1Password to help their teams securely adopt the SaaS and AI tools they need to do their best work. If you're excited about the opportunity to contribute to the digital safety of millions, to work alongside a team of curious, driven individuals, and to solve hard problems in a fast-paced, dynamic environment, then we want to hear from you. Come join us and help shape a safer, simpler digital future. We're hiring a Frontend Developer to join our Developer and AI user interface team, where you'll build the controls and workflows that give developers and security teams visibility over how machine workloads, CI/CD pipelines, and AI agents access credentials at runtime. How we\u2019re using AI today Our Engineering, Product, and Design teams are thoughtfully integrating AI across the full software and product development lifecycle to move faster without sacrificing quality or security. In practice, that looks like engineers using AI-assisted coding tools to accelerate reviews and catch bugs earlier, product managers synthesizing user research at scale, and designers rapidly prototyping and iterating with AI-generated mockups. We approach AI the same way we approach security: with clear principles, human accountability at every consequential decision point, and rigorous evaluation before anything ships to customers. This is a remote opportunity within Canada and the US. What we're looking for: - 2+ years of experience in frontend software development; strong TypeScript fundamentals and experience with React or a comparable component-based framework - Experience contributing to features end-to-end, from API contract through component implementation and unit tests - Experience building complex form flows, including multi-step wizards, validation, error states, and async operations with sequential API calls and robust failure handling - You care deeply about code quality and visual craft. You sweat the details, review work critically, and hold a high bar for what ships - Working knowledge of accessibility fundamentals including keyboard navigation, ARIA, and screen reader considerations - Familiarity with i18n workflows, including static string extraction and integration with a localization system - Comfortable working iteratively. That means managing ambiguity, communicating progress clearly, and coordinating with cross-functional teams throughout the development cycle Bonus points for: - Experience with Electron or other desktop-targeted web runtimes - Working knowledge of GraphQL \u2014 writing queries and mutations, managing fetch/refetch behavior with Apollo Client What you can expect: - Build UI for a developer-facing secrets management product, including CI/CD integrations, workload identity flows, and environment configuration - Contribute to the auth prompt and autofill experience that users interact with every day across desktop and web surfaces - Build new product surfaces including multi-step setup wizards, list/detail pages, and admin policy controls, implementing from Figma designs through to production-ready components - Ship features incrementally, working collaboratively from scoping through launch, with visibility controls and policy checks shaping what different users see - Follow established design system guidelines and contribute to component patterns, with component tests required alongside every feature as part of the PR process - Collaborate with product, design, and infrastructure partners throughout the full development lifecycle, from planning and estimation through launch and iteration - Review code and share knowledge with teammates, contributing to a team culture of high standards and constructive feedback - Contribute to and maintain documentation on code processes, systems, and decisions to support team knowledge and scalability - Participate in a rotating on-call schedule shared across the team USA-based roles only: The annual base salary for this role is between $123,000 USD and $172,000 USD, plus immediate participation in 1Password's benefits program (health, dental, 401k and many others), utilization of our generous paid time off, an equity grant and, where applicable, participation in our incentive programs. Canada-based roles only: The annual base salary for this role is between $111,000 CAD and $155,000 CAD, plus immediate participation in 1Password\u2019s generous benefits program (health, dental, RRSP and many others), utilization of our generous paid time off, an equity grant and, where applicable, participation in our incentive programs. At 1Password, we approach each individual's compensation with a promise of fair market value and internal equity commensurate with experience and specific skill set. This posting is for an existing vacancy. Our culture At 1Password, we prioritize collaboration, clear and transparent communication, receptiveness to feedback, and alignment with our core values: keep it simple, lead with honesty, and put people first. You\u2019ll be part of a team that challenges the status quo, and is excited to experiment and iterate in search of the best solution. That said, 1Password is not for everyone https://blog.1password.com/inside-the-culture-powering-1passwords-next-chapter/. Our work is demanding, we strive for excellence, and the pace is fast. We need people who are keen to take on challenging problems, who seek feedback to grow, and who are driven to make an impact. If you're looking for a place where you can settle into a comfortable routine, this might not be the right fit for you. We\u2019re looking for individuals who are proven experts in their fields, as well as those who are highly adaptable, can thrive in ambiguity and through change, are curious, and above all deliver results. How we work with AI We are committed to leveraging cutting-edge technology\u2014including AI\u2014to achieve our mission. We also understand that thinking critically about AI in its current forms will help us create better solutions for our customers and ourselves with its future forms, which will help us continue to close the gap between security and privacy and achieve our mission. We want team members at all levels to take the approach of actively learning AI best practices, identifying opportunities to apply AI in meaningful ways, and driving innovative solutions in their daily work. Embracing the future of AI isn't just encouraged\u2014it's an essential part of how we will be successful at 1Password. This approach extends to our hiring process\u2014candidates are welcome to use AI tools responsibly and thoughtfully during the application process. To us, this means we do ask that you join live interviews without using AI tools so we can get to know how you communicate, solve problems, and collaborate with others. Our approach to remote work We believe in the power of remote work, but recognize that in-person connection is important to help us achieve our mission. While we are a remote-first company, travel for in-person engagement is a part of almost all roles, and we require our employees to be ready and willing to take part. Frequency will depend on role and responsibilities, and may include, but is not limited to: annual department-wide offsites, team meetings, and customer/industry events. What we offer We believe in working hard, and rewarding that hard work through our benefits. While not an exhaustive list, here is a glance at what we currently offer: Health and wellbeing \ud83d\udc76 Maternity and parental leave top-up programs \ud83e\ude7a Competitive health benefits \ud83c\udfdd Generous PTO policy Growth and future \ud83d\udcc8 RSU program for most employees \ud83d\udcb8 Retirement matching program \ud83d\udd11 Free 1Password account Community \ud83e\udd1d Paid volunteer days \ud83c\udfc6 Peer-to-peer recognition through Bonusly \ud83c\udf0e Remote-first work environment *Some roles in our GTM team are currently being hired for in-person hybrid work in Toronto and Austin. These roles will specify on the posting. You belong here. 1Password is proud to be an equal opportunity employer. We are committed to fostering an inclusive, diverse and equitable workplace that is built on trust, support and respect. We welcome all individuals and do not discriminate on the basis of gender identity and expression, race, ethnicity, disability, sexual orientation, colour, religion, creed, gender, national origin, age, marital status, pregnancy, sex, citizenship, education, languages spoken or veteran status. Be yourself, find your people and share the things you love. Accommodation is available upon request at any point during our recruitment process. If you require an accommodation, please speak to your talent acquisition partner or email us at nextbit@agilebits.com and we\u2019ll work to meet your needs. Remote work is a part of our DNA. Given that our company was founded remotely in 2005, we can safely say we're experts at building remote culture. That said, remote work at 1Password does mean working from your home country. If you've got questions or concerns about this, your talent partner would be happy to address them with you. Successful applicants will be required to complete a background check that may consist of prior employment verification, reference checks, education confirmation, criminal background, publicly available social media, credit history, or other information, as permitted by local law. 1Password uses artificial intelligence (AI) and machine learning (ML) technologies, including natural language processing and predictive analytics, to assist in the initial screening of employment applications and improve our recruitment process. See here https://www.ashbyhq.com/downloadables/ashby-bias-audit-08-2024.pdf for the latest third party bias audit information. If you prefer not to have your application assessed using AI/ML features, you may opt out by completing this form https://jobs.ashbyhq.com/1password/automation-notice. For additional information see our Candidate Privacy Notice https://1password.com/files/candidate-privacy-notice.pdf."}, {"id": "1167f8c2654d68f9379c3e5a", "company": "Cohere", "title": "Software Engineer, Security", "location": "Toronto, San Francisco, Canada, United States, New York, Montreal, Remote", "workplace": "Remote", "source": "ashby", "sources": ["ashby"], "url": "https://jobs.ashbyhq.com/cohere/a10a96b5-f772-466d-9297-f021f78ca9c0", "score": 78, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, aws, azure, kubernetes, go", "skills": "python, aws, azure, kubernetes, go", "published": "2026-09-17T19:46:04.566000+00:00", "firstSeen": "2026-10-17T00:56:21.271987+00:00", "lastSeen": "2026-10-17T01:24:26.459976+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "WHO ARE WE? Cohere is the leading security-first enterprise AI company. We build cutting-edge foundation AI models and end-to-end products that are designed to solve real-world business problems. We\u2019re training and deploying frontier models for enterprises who are building AI systems. We believe that our work is instrumental to the widespread adoption of AI and we are looking for folks that want to be part of that. We obsess over what we build. Each one of us is responsible for contributing to increasing the capabilities of our models and the value they drive for our customers. Cohere is a team of researchers, engineers, designers, and more, who are all passionate about their craft. We are a global technology company headquartered in Toronto with key offices in London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul. Join us! About the Role Are you passionate about secure-by-design software engineering? Do you want to be at the forefront of AI innovation and enterprise security? Cohere's North team is seeking a Software Engineer with a focus on security to join our mission and make a significant impact. This isn't a review-and-advise role, you'll own and ship production security features that customers rely on every day. Your Role: As a Senior Software Engineer with a security focus, you'll play a pivotal role in building and securing North's architecture. Your responsibilities will include: - Software Development: Contributing to the core development of security features such as OIDC/OAuth flows and session management, ensuring North's AI agents are secure - Secure Coding: Writing secure code to handle OIDC tokens, user claims, and sensitive data, adhering to best practices for JWT validation and encryption - Authentication and Data Protection: Implementing authentication mechanisms including user login, token management, and authorization checks to maintain data integrity - Tool Integration: Pulling in new tools to enhance North's security capabilities - DevSecOps: Design and implement secret management within Kubernetes clusters, including encryption and RBAC - Cross-functional Collaboration: Demonstrate strong soft skills to communicate security best practices to stakeholders in a clear and concise manner You may be a good fit if: - Have 5+ years building user-facing security features in production systems - Ship production Python confidently and frequently - Understand OIDC/OAuth 2.0, JWT validation, and token lifecycle management deeply\u2014not just conceptually - Have hands-on experience with Kubernetes in both development and production environments - Have worked across GCP, AWS, Azure, or hybrid/multi-cloud deployments - Are comfortable working across the stack - Communicate security concepts clearly to non-security engineers and stakeholders - Thrive in fast-moving environments where priorities evolve - Experience working with AI/ML systems or LLM-based applications FULL-TIME EMPLOYEES AT COHERE ENJOY THESE PERKS: - A weekly lunch stipend of $75/\u00a375 or equivalent in your local currency for lunch. - Full health and dental benefits, including a separate budget for mental health. - RRSP matching, 401K, Pension Scheme. - 100% Parental Leave top-up for up to 6 months, for either parent. - Annual enrichment benefits: Arts & culture, fitness/wellness, quality time, and a workspace improvement credit. Education & learning stipend for conferences, courses, and coaching. - 6 weeks of paid vacation (30 working days!) - Budget for traveling to other offices if you are remote, plus an annual company offsite. HOW AND WHERE WE WORK: - Cohere is remote-friendly, but we also have offices in Toronto, London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul with more opening soon. - For those in the office: a daily lunch program, plenty of snacks, and regular community and social events. - For those not near an office: a co-working benefit so you can work alongside others in your city. - Everyone receives a $500 home office stipend to set up your workspace properly. If any of the above doesn\u2019t line up exactly with your experience, we still encourage you to apply. We strive to create an inclusive work environment for all; we welcome applicants from all backgrounds and are committed to providing equal opportunities. Should you require any accommodations during the recruitment process, please submit an Accommodations Request Form https://docs.google.com/forms/d/12a6IrLdF3kI2nonKSr4tiFuz18rLQbaeYV-JM9L4o9Q/edit, and we will work together to meet your needs. We may use AI-enabled tools to screen and assess applicants against the criteria for this position. This helps our recruiters identify potentially qualified candidates, but it doesn't limit the applications our recruiters may review or consider. Beware of Scams: Cohere will never ask for payment or third-party services (e.g., CV writing) as part of our hiring process. All legitimate roles are listed on the Cohere careers page and LinkedIn only, with all communications from Cohere employees coming from an @cohere.com or @cw.cohere email alias. If jobs are viewed on other sites then please verify these through our official careers https://cohere.com/careers page."}, {"id": "79de33ff232c492b05c6c560", "company": "Cohere", "title": "Software Engineer, Security Agents", "location": "United States, Canada, Remote", "workplace": "Remote", "source": "ashby", "sources": ["ashby"], "url": "https://jobs.ashbyhq.com/cohere/1b909aeb-1221-476f-88fe-8300a2065975", "score": 69, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, go", "skills": "python, go", "published": "2026-09-14T13:15:03.461000+00:00", "firstSeen": "2026-10-17T00:56:21.271882+00:00", "lastSeen": "2026-10-17T01:24:26.459849+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "WHO ARE WE? Cohere is the leading security-first enterprise AI company. We build cutting-edge foundation AI models and end-to-end products that are designed to solve real-world business problems. We\u2019re training and deploying frontier models for enterprises who are building AI systems. We believe that our work is instrumental to the widespread adoption of AI and we are looking for folks that want to be part of that. We obsess over what we build. Each one of us is responsible for contributing to increasing the capabilities of our models and the value they drive for our customers. Cohere is a team of researchers, engineers, designers, and more, who are all passionate about their craft. We are a global technology company headquartered in Toronto with key offices in London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul. Join us! ROLE OVERVIEW Ready to build AI agents that revolutionize enterprise security? The North Security team is looking for a Senior Software Engineer to create autonomous systems that handle the complex, critical tasks security practitioners face every day. KEY RESPONSIBILITIES As a Senior Software Engineer focused on agentic security, you'll build intelligent systems that empower security teams. Your responsibilities will include: - Build autonomous security agents that perform alert triage, secure code reviews, threat modeling, and vulnerability assessment - Develop agent orchestration systems that help security practitioners automate repetitive security tasks - Design and implement agent security controls to ensure our AI agents can safely interact with sensitive enterprise data - Create the security infrastructure that allows agents to operate in high-trust environments with stringent deployment requirements - Ship production-ready agent capabilities that run efficiently in resource-constrained environments - Research and implement novel security patterns for AI agent systems, sometimes requiring custom solutions where standard libraries fall short - Conduct security testing of both the agents you build and the platform that runs them. QUALIFICATIONS - 5+ years of software engineering experience with a track record of shipping user-facing security features - Strong Python development skills with significant production experience - Experience building or working with autonomous systems, AI agents, or intelligent automation - Solid understanding of security principles including session management, authentication, authorization, and secure coding practices - Ability to think about security at multiple layers: application security, agent behavior security, and infrastructure security - Comfortable working across the full stack and diving into unfamiliar codebases to understand and fix issues - Thrive in fast-paced environments where you can adapt to evolving priorities - Excited about the intersection of AI/ML and security engineering. WORKING LOCATION This role can be based remotely or from one of our office locations listed on the job description - there is no minimum in-office qualification requirement. We care most about hiring exceptional people regardless of locations, though please check the location listed on the posting for guidance around the core time zone or working hours alignment expected for the role. FULL-TIME EMPLOYEES AT COHERE ENJOY THESE PERKS: - A weekly lunch stipend of $75/\u00a375 or equivalent in your local currency for lunch. - Full health and dental benefits, including a separate budget for mental health. - RRSP matching, 401K, Pension Scheme. - 100% Parental Leave top-up for up to 6 months, for either parent. - Annual enrichment benefits: Arts & culture, fitness/wellness, quality time, and a workspace improvement credit. Education & learning stipend for conferences, courses, and coaching. - 6 weeks of paid vacation (30 working days!) - Budget for traveling to other offices if you are remote, plus an annual company offsite. HOW AND WHERE WE WORK: - Cohere is remote-friendly, but we also have offices in Toronto, London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul with more opening soon. - For those in the office: a daily lunch program, plenty of snacks, and regular community and social events. - For those not near an office: a co-working benefit so you can work alongside others in your city. - Everyone receives a $500 home office stipend to set up your workspace properly. If any of the above doesn\u2019t line up exactly with your experience, we still encourage you to apply. We strive to create an inclusive work environment for all; we welcome applicants from all backgrounds and are committed to providing equal opportunities. Should you require any accommodations during the recruitment process, please submit an Accommodations Request Form https://docs.google.com/forms/d/12a6IrLdF3kI2nonKSr4tiFuz18rLQbaeYV-JM9L4o9Q/edit, and we will work together to meet your needs. We may use AI-enabled tools to screen and assess applicants against the criteria for this position. This helps our recruiters identify potentially qualified candidates, but it doesn't limit the applications our recruiters may review or consider. Beware of Scams: Cohere will never ask for payment or third-party services (e.g., CV writing) as part of our hiring process. All legitimate roles are listed on the Cohere careers page and LinkedIn only, with all communications from Cohere employees coming from an @cohere.com or @cw.cohere email alias. If jobs are viewed on other sites then please verify these through our official careers https://cohere.com/careers page."}, {"id": "ebd51b2448c8989406859180", "company": "Cohere", "title": "Software Engineer, Integrations", "location": "Europe, London, United States, New York, United Kingdom, Toronto, Montreal, Remote", "workplace": "Remote", "source": "ashby", "sources": ["ashby"], "url": "https://jobs.ashbyhq.com/cohere/96c74af4-b3d7-4960-a666-212ce4debac8", "score": 66, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: go", "skills": "go", "published": "2026-08-11T10:41:22.845000+00:00", "firstSeen": "2026-10-17T00:56:21.271076+00:00", "lastSeen": "2026-10-17T01:24:26.459094+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "WHO ARE WE? Cohere is the leading security-first enterprise AI company. We build cutting-edge foundation AI models and end-to-end products that are designed to solve real-world business problems. We\u2019re training and deploying frontier models for enterprises who are building AI systems. We believe that our work is instrumental to the widespread adoption of AI and we are looking for folks that want to be part of that. We obsess over what we build. Each one of us is responsible for contributing to increasing the capabilities of our models and the value they drive for our customers. Cohere is a team of researchers, engineers, designers, and more, who are all passionate about their craft. We are a global technology company headquartered in Toronto with key offices in London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul. Join us! About North: North https://cohere.com/north is Cohere's cutting-edge AI workspace platform, designed to revolutionize the way enterprises utilize AI. It offers a secure and customizable environment, allowing companies to deploy AI while maintaining control over sensitive data. North integrates seamlessly with existing workflows, providing a trusted platform that connects AI agents with workplace tools and applications. Why this role: The Data Abstractions & Tools team is the group inside North responsible for how users bring their data into the platform and put it to work. We own the systems that let users upload, organize, and share their files and knowledge bases, the framework for extending agents with skills and third-party integrations, and the data-sync pipeline that connects enterprise data sources to North's agents. North connects to a growing set of external tools and data sources so its agents can act on a user's real workflow. This role owns the integration pipeline end-to-end: adding new integrations to the platform, helping other engineers do the same, and becoming the owner of the process that makes that repeatable. You will also create the evals and tests that make sure those integrations work as expected and keep working as the platform evolves. In this role, you will: - Build new integrations (tools) on the North agentic platform, and maintain the ones already in production. - Own the integration pipeline: the process for adding a new tool, from design to shipping to ongoing maintenance. - Help other engineers add integrations of their own, and raise the bar for how the team does it. - Create evals and tests to make sure integrations work as expected and alert on regressions. - Tune tool descriptions to improve performance based on feedback and evals. - Use AI actively in your work, while staying accountable for the quality and reliability of what you ship. You may be a good fit if: - You have shipped production code and are comfortable building integrations against external APIs. - You have a background in evaluating agentic systems (ideal), or at minimum know what an eval is and are comfortable with prompt engineering and tool-description tuning. - You excel in fast-paced environments and can execute while priorities are a moving target. - You bring high agency: you learn quickly and drive change without waiting for perfect instructions. - You've owned things end-to-end before and care about the quality of what ships, not just that it shipped. - You enjoy helping other engineers succeed, not just shipping your own work. Working Location: This role can be based remotely or from one of our office locations listed on the job description - there is no minimum in-office qualification requirement. We care most about hiring exceptional people regardless of locations, though please check the location listed on the posting for guidance around the core time zone or working hours alignment expected for the role. FULL-TIME EMPLOYEES AT COHERE ENJOY THESE PERKS: - A weekly lunch stipend of $75/\u00a375 or equivalent in your local currency for lunch. - Full health and dental benefits, including a separate budget for mental health. - RRSP matching, 401K, Pension Scheme. - 100% Parental Leave top-up for up to 6 months, for either parent. - Annual enrichment benefits: Arts & culture, fitness/wellness, quality time, and a workspace improvement credit. Education & learning stipend for conferences, courses, and coaching. - 6 weeks of paid vacation (30 working days!) - Budget for traveling to other offices if you are remote, plus an annual company offsite. HOW AND WHERE WE WORK: - Cohere is remote-friendly, but we also have offices in Toronto, London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul with more opening soon. - For those in the office: a daily lunch program, plenty of snacks, and regular community and social events. - For those not near an office: a co-working benefit so you can work alongside others in your city. - Everyone receives a $500 home office stipend to set up your workspace properly. If any of the above doesn\u2019t line up exactly with your experience, we still encourage you to apply. We strive to create an inclusive work environment for all; we welcome applicants from all backgrounds and are committed to providing equal opportunities. Should you require any accommodations during the recruitment process, please submit an Accommodations Request Form https://docs.google.com/forms/d/12a6IrLdF3kI2nonKSr4tiFuz18rLQbaeYV-JM9L4o9Q/edit, and we will work together to meet your needs. We may use AI-enabled tools to screen and assess applicants against the criteria for this position. This helps our recruiters identify potentially qualified candidates, but it doesn't limit the applications our recruiters may review or consider. Beware of Scams: Cohere will never ask for payment or third-party services (e.g., CV writing) as part of our hiring process. All legitimate roles are listed on the Cohere careers page and LinkedIn only, with all communications from Cohere employees coming from an @cohere.com or @cw.cohere email alias. If jobs are viewed on other sites then please verify these through our official careers https://cohere.com/careers page."}, {"id": "3a35ab81144e0cd7686253a6", "company": "Cohere", "title": "Software Engineer, Data Infrastructure", "location": "New York, San Francisco, Canada, United States, Toronto, Montreal, Remote", "workplace": "Remote", "source": "ashby", "sources": ["ashby"], "url": "https://jobs.ashbyhq.com/cohere/6aa3cb2b-ee8b-4c92-b505-3a7509f80d7f", "score": 72, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, kubernetes, go", "skills": "python, kubernetes, go", "published": "2026-05-14T19:24:12.210000+00:00", "firstSeen": "2026-10-17T00:56:21.269739+00:00", "lastSeen": "2026-10-17T01:24:26.457757+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "WHO ARE WE? Cohere is the leading security-first enterprise AI company. We build cutting-edge foundation AI models and end-to-end products that are designed to solve real-world business problems. We\u2019re training and deploying frontier models for enterprises who are building AI systems. We believe that our work is instrumental to the widespread adoption of AI and we are looking for folks that want to be part of that. We obsess over what we build. Each one of us is responsible for contributing to increasing the capabilities of our models and the value they drive for our customers. Cohere is a team of researchers, engineers, designers, and more, who are all passionate about their craft. We are a global technology company headquartered in Toronto with key offices in London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul. Join us! Why this role? The Data Infrastructure team at Cohere is responsible for the storage and data movement layer underlying every model training run. We're building the unified storage layer that feeds our training workloads. It needs to serve petabytes of training data and model checkpoints fast enough to keep thousands of GPUs busy across several training clusters. In this role, you\u2019d have an opportunity to build this system from the ground up. You\u2019d be a key contributor, working on a problem few teams have had to solve at this scale. In this role, you will: - Design, build, and operate the distributed storage system that feeds model training and evaluation. - Run this system multiple on Kubernetes clusters at petabyte scale. - Work with researchers and training-infra teams on how jobs actually read and write data, and turn that into throughput, latency, and durability requirements - Work through the networking, I/O, and consistency problems of moving large datasets and checkpoints across regions and backends, with GPU idle time and time-to-insight as the measures of success You may be a good fit if you have: - Strong storage fundamentals, including replication, consistency, caching, and data lifecycle management. - Strong coding ability. We work in Python and Go; experience in either is enough, but you should be willing to pick up the other - Experience running stateful systems on Kubernetes, including Persistent Volumes, CSI drivers, and StatefulSets. - Hands-on experience with cloud object storage such as S3 as well as POSIX-style filesystems. It\u2019s a bonus if you have: - Experience with parallel or HPC filesystems such as Weka, VAST, or Lustre. - Familiarity with the data-loading and checkpointing patterns used in large-scale model training. - An interest in how large models are trained and evaluated, including the trajectory and eval data those runs generate, and a desire to understand the workloads the platform is serving. FULL-TIME EMPLOYEES AT COHERE ENJOY THESE PERKS: - A weekly lunch stipend of $75/\u00a375 or equivalent in your local currency for lunch. - Full health and dental benefits, including a separate budget for mental health. - RRSP matching, 401K, Pension Scheme. - 100% Parental Leave top-up for up to 6 months, for either parent. - Annual enrichment benefits: Arts & culture, fitness/wellness, quality time, and a workspace improvement credit. Education & learning stipend for conferences, courses, and coaching. - 6 weeks of paid vacation (30 working days!) - Budget for traveling to other offices if you are remote, plus an annual company offsite. HOW AND WHERE WE WORK: - Cohere is remote-friendly, but we also have offices in Toronto, London, New York City, San Francisco, Montreal, Paris, Berlin and Seoul with more opening soon. - For those in the office: a daily lunch program, plenty of snacks, and regular community and social events. - For those not near an office: a co-working benefit so you can work alongside others in your city. - Everyone receives a $500 home office stipend to set up your workspace properly. If any of the above doesn\u2019t line up exactly with your experience, we still encourage you to apply. We strive to create an inclusive work environment for all; we welcome applicants from all backgrounds and are committed to providing equal opportunities. Should you require any accommodations during the recruitment process, please submit an Accommodations Request Form https://docs.google.com/forms/d/12a6IrLdF3kI2nonKSr4tiFuz18rLQbaeYV-JM9L4o9Q/edit, and we will work together to meet your needs. We may use AI-enabled tools to screen and assess applicants against the criteria for this position. This helps our recruiters identify potentially qualified candidates, but it doesn't limit the applications our recruiters may review or consider. Beware of Scams: Cohere will never ask for payment or third-party services (e.g., CV writing) as part of our hiring process. All legitimate roles are listed on the Cohere careers page and LinkedIn only, with all communications from Cohere employees coming from an @cohere.com or @cw.cohere email alias. If jobs are viewed on other sites then please verify these through our official careers https://cohere.com/careers page."}, {"id": "1dd8fe3026926d9357c51999", "company": "Reddit", "title": "Software Engineer, Ads", "location": "Remote - Ontario, Canada", "workplace": "Remote", "source": "greenhouse", "sources": ["greenhouse"], "url": "https://job-boards.greenhouse.io/reddit/jobs/6512458", "score": 78, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, java, postgres, docker, kubernetes, go", "skills": "python, java, postgres, docker, kubernetes, go", "published": "2025-01-07T00:00:56+00:00", "firstSeen": "2026-10-17T00:56:21.261159+00:00", "lastSeen": "2026-10-17T01:24:26.446350+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "Reddit is a community of communities. It\u2019s built on shared interests, passion, and trust, and is home to the most open and authentic conversations on the internet. Every day, Reddit users submit, vote, and comment on the topics they care most about. With 100,000+ active communities and approximately 130 million daily active unique visitors, Reddit is one of the internet\u2019s largest sources of information. For more information, visit www.redditinc.com . Reddit has a flexible workforce! If you happen to live close to one of our physical office locations our doors are open for you to come into the office as often as you'd like. Don't live near one of our offices? No worries: You can apply to work remotely in any country in which we have a physical presence. Team Description Reddit is poised to rapidly innovate and grow like no other time in its history. We\u2019re currently hiring across multiple teams, some of these teams include: Ads ML Serving Team The Ads ML Serving team is part of Reddit\u2019s Ads ML Platform, which builds the infrastructure and tools that power machine learning across Ads. This team focuses on creating a highly reliable, scalable, and efficient ML serving stack. Their work includes evolving long-term serving architecture, integrating closely with the ads serving stack, optimizing CPU/GPU performance, and building model velocity tools like observability libraries and model quality gating. Attribution &amp; Identity Team The Attribution &amp; Identity team builds products that help advertisers understand and measure the impact of their campaigns. They focus on attribution systems, identity solutions, and advertiser experimentation tools that improve performance insights and usability. Their goal is to make Reddit\u2019s advertising platform more effective, transparent, and data-driven. Ads Growth Team The Ads Growth team drives initiatives to expand Reddit\u2019s advertiser base, with a focus on Small to Medium Businesses (SMBs). We build and scale the technical foundation for key product pillars that enable SMB advertisers to succeed on Reddit. Our work spans collaboration with product, design, marketing, data science, UX, and sales teams to deliver measurable business outcomes. We prioritize iterative development, rapid shipping, rigorous testing, and building capabilities that create step-change growth. Our goal is to multiply the number of monthly active advertisers by delivering impactful tools, features, and experiences tailored to the needs of SMBs. Business Manager The Business Manager team stands out for its genuinely inclusive and collaborative culture, where not only is open feedback central, but every opinion and idea is truly valued and given space to shape our direction. Here, diverse perspectives are seen as a core strength, fostering a team dynamic where everyone feels empowered to contribute and innovate. On a day-to-day basis, engineers tackle complex, high-stakes challenges at the core of Reddit\u2019s ads platform which include innovating on permissions systems, building Agency and Large Enterprise solutions, and driving adoption among Reddit's largest advertisers. From ideation to delivery, our engineers are trusted with end-to-end ownership of their projects, working closely in cross-functional collaboration with PMs, UX, and partner teams. This hands-on approach means every team member plays a direct and visible role in delivering high-impact, user-focused solutions for some of Reddit\u2019s most strategic advertisers. Role Description: This is a generalist mid-level backend position within the Ads Organization. Ads is the fuel that powers Reddit\u2019s mission. As a backend engineer on the team, candidates might work on: Microservices and APIs that power our advertiser-facing product, ads.reddit.com Distributed systems that ensure the right ad gets shown to the right user at the right time Backends that power interactive user experiences on our ads like Polls and Games Real time, data intensive systems that measure the performance of our ad campaigns Infrastructure that supports all of the above Technologies used on the team include: Languages: Go, Python, Scala Frameworks: Spark, Thrift, Baseplate, Kafka Datastores: Postgres, BigQuery, Redis, Druid&nbsp; Tools: Kubernetes, Argo, Docker Mid-level engineers are expected to absorb best practices and learn exceptionally quickly while being effective core contributors. Engineers at this level must be able to code independently, but may work with senior engineers on the design of complex solutions. The most important skills an engineer at this level must possess are 1) coachability and an eagerness to grow, 2) deep passion for coding, and 3) excellent independent learning skills, all while operating as a fully functioning member of an engineering team. Responsibilities: Work with product managers to design and implement Ads products. Collaborate closely with the platform and data teams while building new features. Lead the processes needed to improve operational stability, including improving code quality, delivering dashboards and data visualizations. Build extensible components that would align with the product objectives.&nbsp; Support day to day project management tasks including communicating project updates, managing project timelines and overseeing project execution.&nbsp;&nbsp; Required Qualifications: 3+ years of software development experience in one or more general purpose programming languages (Java, Scala, Go, C++, Python). Able to take complete ownership of a feature or project. Bonus Points: Experience working in the Ads domain&nbsp; Experience or interest in the advertising business and understanding customer needs Benefits: Global Benefit programs that fit your lifestyle, from workspace to professional development to caregiving support Family Planning Support Gender-Affirming Care Mental Health &amp; Coaching Benefits Comprehensive Medical Benefits &amp; Health Care Spending Account Registered Retirement Savings Plan with matching contributions Income Replacement Programs Flexible Vacation &amp; Paid Volunteer Time Off Generous Paid Parental Leave In select roles and locations, the interviews will be recorded, transcribed and summarized by artificial intelligence (AI). You will have the opportunity to opt out of recording, transcription and summarization prior to any scheduled interviews. During the interview, we will collect the following categories of personal information: Identifiers, Professional and Employment-Related Information, Sensory Information (audio/video recording), and any other categories of personal information you choose to share with us. We will use this information to evaluate your application for employment or an independent contractor role, as applicable.&nbsp; We will not sell your personal information or disclose it to any third party for their marketing purposes.&nbsp; We will delete any recording of your interview promptly after making a hiring decision.&nbsp; For more information about how we will handle your personal information, including our retention of it, please refer to our Candidate Privacy Policy for Potential Employees and Contractors . Reddit is proud to be an equal opportunity employer, and is committed to building a workforce representative of the diverse communities we serve.&nbsp; Reddit is committed to providing reasonable accommodations for qualified individuals with disabilities and disabled veterans in our job application procedures. If, due to a disability, you need an accommodation during the interview process, please let your recruiter know."}, {"id": "303a114830ac3f57ee2b9114", "company": "Affirm", "title": "Software Engineer II, Backend (Online Storage)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "sources": ["greenhouse"], "url": "https://job-boards.greenhouse.io/affirm/jobs/8012043003", "score": 87, "why": "role title matches target software roles; experience requirement is within configured range; location explicitly matches Canada targets; technical skills detected: python, sql, aws, kubernetes", "skills": "python, sql, aws, kubernetes", "published": "2026-10-08T19:53:50+00:00", "firstSeen": "2026-10-17T00:56:21.255393+00:00", "lastSeen": "2026-10-17T01:24:26.442421+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "At Affirm, we exist for the moments that matter\u2014giving people a clear, predictable way to pay over time, with no hidden fees, no surprises, and no tradeoffs on what matters most. The Data and Storage Services team is responsible for Affirm's data infrastructure across OLTP and OLAP systems, spanning critical online checkout databases, batch orchestration, streaming infrastructure, event-driven frameworks, BI, analytics tooling, large-scale data platforms, and agentic data tools such as semantic layers and internal platform data applications. Our mission is to provide trustworthy, intuitive, and cost-efficient solutions for Affirmers to secure, store, analyze, and transform data at exceptional scale. The Online Storage team provides a set of managed databases as a platform, used to persist data for all Affirm services. Our platform enables self-service access to OLTP storage systems, including Relational DB(MySQL), KV(DynamoDB), Distributed SQL(TiDB) and Cache(Redis). As a team, we are responsible for various data and access patterns, including but not limited to mission-critical financial transactional data, data science models, and any new persistence use case. These responsibilities require us to learn and gain deep expertise in various database systems.&nbsp; We are looking for a talented Software Engineer who can build and scale Cache Services (Redis and Valkey) identifying opportunities to improve how we migrate, productionize, operate, self-service and improve this mission-critical infrastructure to unlock substantial value within our business. You\u2019ll have the opportunity to directly influence your team\u2019s roadmap in close collaboration with your peers, share your knowledge and expertise with others and learn from some of the best on our shared mission to deliver honest financial products that improve lives. What you\u2019ll do Build and scale Affirm's Cache Services on Redis and Valkey, owning cluster migrations end to end and delivering them in phases against agreed outcomes. Productionize cache clusters: capacity and shard planning, failover and replication setup, upgrades, and staged rollouts with rollback paths. Replace manual cache requests (provisioning, config changes, access) with automated, audited self-service workflows. Operate the fleet in production: define SLOs, build alerting for hot keys, memory pressure and replication lag, and use on-call findings to reduce KTLO. Partner with client teams on caching strategy (key design, TTLs, consistency, client timeouts) and feed fleet data into the team's roadmap. With the support of your team\u2019s tech lead and manager, you will break down larger projects into individual tasks, deliver them in multiple phases, and collaborate with others to ensure timely delivery of your work. Support your peers and stakeholders in the product development lifecycle by collaborating with product management, design &amp; analytics by participating in ideation, articulating technical constraints, and partnering on decisions that properly consider risks and trade-offs. Support the operations and availability of your team\u2019s artifacts by creating and monitoring metrics, escalating when needed, and supporting \u201ckeep the lights on\u201d &amp; on-call efforts. Contribute to a sense of community on your team by engaging in growth and development activities such as participation in the interview process. What we look for 2+ years of experience as a software engineer. Experience designing, developing and launching backend systems and are proficient in one of Python or Kotlin. Familiar with the building blocks of distributed systems, and the technologies like AWS, MySQL, Redis/Valkey, Terraform and Kubernetes. Have worked on Redis, Valkey or a comparable in-memory store in production and understand replication, persistence, cluster mode, eviction, and their failure modes. Can reason about a caching workload end to end: hit rates, tail latency, hot keys, stampedes, and consistency with the source of truth. Experience automating infrastructure operations with Terraform, Kubernetes and Python, and prefer tested playbooks over manual runbooks. Experience carrying on-call for a stateful service and can take an incident from metrics to root cause to a durable fix. You have mastered taking a simple problem or business scenario into a solution that interacts with multiple software components, and executing on it by writing clear, easily understood, well tested and extensible code. Comfortable navigating a large code base, debugging others' code, and providing feedback to other engineers through code reviews. Demonstrated experience that you take ownership of your growth, proactively seeking feedback from your team, your manager, and your stakeholders. Strong verbal and written communication skills that support effective collaboration with our global engineering team. Base Pay Grade - L Equity Grade - Canada 5 Employees new to Affirm typically come in at the start of the pay range. Affirm focuses on providing a simple and transparent pay structure which is based on a variety of factors, including location, experience and job-related skills. Base pay is part of a total compensation package that may include monthly stipends for health, wellness and tech spending, and benefits (including 100% subsidized medical coverage, dental and vision for you and your dependents). In addition, the employees may be eligible for equity rewards offered by Affirm Holdings, Inc. (parent company). CAN base pay range per year: $133,000 - $183,000 $CAD. This remote role is open only to candidates residing in Alberta, British Columbia, Manitoba, New Brunswick, Newfoundland and Labrador, Nova Scotia, Ontario, Prince Edward Island, or Saskatchewan. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of employment. Some positions may occasionally require in-person work at an Affirm office, and a few are office-based due to the nature of the work. All new hires will be invited to attend an in-person onboarding experience. Benefits designed for you Our benefits reflect our commitment to care, transparency, and flexibility. Here are a few highlights: Health coverage at no cost: We cover 100% of premiums for employees and their dependents. Spending stipends: Monthly stipends support your tech setup, and the ability to choose health and wellness options that are right for you. Time off to recharge: Flexible time off and generous holiday calendars help you rest when you need to. Own a piece of what you build: Our employee stock purchase plan (ESPP) lets you buy Affirm stock at a discount. We\u2019re committed to providing an inclusive interview process, including accommodations for candidates with disabilities. If you need support, we\u2019re happy to help. For positions based in San Francisco or Los Angeles: Affirm considers qualified applicants with arrest and conviction records, as required by law. By clicking \"Submit Application,\" you acknowledge that you have read Affirm's&nbsp; Global Candidate Privacy Notice and consent to the use of your personal information as described."}, {"id": "b91f400cf6b29503397d1bc4", "company": "Affirm", "title": "Software Engineer II, Backend (Decisions Orchestration)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "sources": ["greenhouse"], "url": "https://job-boards.greenhouse.io/affirm/jobs/8003018003", "score": 75, "why": "role title matches target software roles; experience requirement not clearly stated; location explicitly matches Canada targets; technical skills detected: python, sql, aws, go", "skills": "python, sql, aws, go", "published": "2026-10-06T13:57:16+00:00", "firstSeen": "2026-10-17T00:56:21.255282+00:00", "lastSeen": "2026-10-17T01:24:26.442293+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "At Affirm, we exist for the moments that matter\u2014giving people a clear, predictable way to pay over time, with no hidden fees, no surprises, and no tradeoffs on what matters most. Your role will be instrumental in designing the next generation of Affirm\u2019s Checkout Platform to provide a world-class buying experience that puts customers first! We are seeking a Backend Software Engineer to build out financial products and features providing new levels of accessibility and flexibility to our users. You will work in a fast-paced team environment, designing and implementing new API\u2019s and microservice interfaces to manage every users\u2019 transaction with Affirm. You will also use your technical skillset to find opportunities to improve the performance and reliability of the systems that drive the user journey through purchasing with Affirm. Come join us as we build a beloved, lasting financial services brand predicated on honesty and trust. It\u2019s going to be an amazing ride! What you'll do Work with technical leaders in the team to design and implement insightful forward-looking approaches that go beyond the direct team and solve large open-ended problems Actively own components of checkout systems and define their long-term health, while also improving the health of surrounding systems Collaborate with engineers within our team and across the organization to build the next generation of the checkout platform Learn and improve engineering standards, tooling, and processes across the checkout platform What we look for Take Ownership. You enjoy working with product and engineering leaders to develop detailed project definitions, and drive technical decisions within your team Execute. You have a proven track record of developing, testing, and shipping high-quality software at scale Collaborate. You communicate clearly both verbally and in writing. If anything, you trend towards over-communication Build Teams. You grow with engineers around you through sharing your learnings and providing feedback to your peers that will help the team grow Customer-centric mentality. You are empathetic to the user experience and thoughtful about what we can do to make it better &nbsp;This position requires either equivalent practical experience or a Bachelor\u2019s degree in a related field Tech You Will Use Python Kotlin RPC Redis MySQL AWS Github Base Pay Grade - L Equity Grade - Canada 5 Employees new to Affirm typically come in at the start of the pay range. Affirm focuses on providing a simple and transparent pay structure which is based on a variety of factors, including location, experience and job-related skills. Base pay is part of a total compensation package that may include equity rewards, monthly stipends for health, wellness and tech spending, and benefits (including 100% subsidized medical coverage, dental and vision for you and your dependents.) CAN base pay range per year: $133,000 - $183,000 Location - Remote Canada This remote role is open only to candidates residing in Alberta, British Columbia, Manitoba, New Brunswick, Newfoundland and Labrador, Nova Scotia, Ontario, Prince Edward Island, or Saskatchewan. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of employment. Some positions may occasionally require in-person work at an Affirm office, and a few are office-based due to the nature of the work. All new hires will be invited to attend an in-person onboarding experience. Benefits designed for you Our benefits reflect our commitment to care, transparency, and flexibility. Here are a few highlights: Health coverage at no cost: We cover 100% of premiums for employees and their dependents. Spending stipends: Monthly stipends support your tech setup, and the ability to choose health and wellness options that are right for you. Time off to recharge: Flexible time off and generous holiday calendars help you rest when you need to. Own a piece of what you build: Our employee stock purchase plan (ESPP) lets you buy Affirm stock at a discount. We\u2019re committed to providing an inclusive interview process, including accommodations for candidates with disabilities. If you need support, we\u2019re happy to help. For positions based in San Francisco or Los Angeles: Affirm considers qualified applicants with arrest and conviction records, as required by law. By clicking \"Submit Application,\" you acknowledge that you have read Affirm's&nbsp; Global Candidate Privacy Notice and consent to the use of your personal information as described."}, {"id": "4de6ac257cc8ae27cf0d244b", "company": "Affirm", "title": "Software Engineer I, Fullstack (Search)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "sources": ["greenhouse", "simplify"], "url": "https://job-boards.greenhouse.io/affirm/jobs/8017342003", "score": 92, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets; technical skills detected: python, javascript, typescript, java, go", "skills": "python, javascript, typescript, java, go", "published": "2026-10-15T21:31:11+00:00", "firstSeen": "2026-10-17T00:56:21.255173+00:00", "lastSeen": "2026-10-17T01:24:26.442127+00:00", "notified": true, "freshness": "Published within 3 days", "freshnessGroup": "recent", "description": "At Affirm, we exist for the moments that matter\u2014giving people a clear, predictable way to pay over time, with no hidden fees, no surprises, and no tradeoffs on what matters most. Search has become the default way consumers discover where to shop, compare options, and decide what to buy across platforms like Google, TikTok, and even Klarna. As we build a new Ads business and evolve Marketplace into a best in class shopping experience, improving search is one of our highest leverage investments to create an experience users choose and merchants want to invest in. What You'll Do With the support of your team, you will work on tasks that contribute to the team's projects and goals. You will work collaboratively and proactively with your team and stakeholders, bringing them along for your work and helping to create visibility and dialog regarding the risks and trade-offs related to your work. You will strike the right balance of speed and quality in your work, ensuring that we hit our business goals while protecting our systems from downtime. You will contribute to a sense of community on your team by engaging in growth and development activities. What We Look For You have previous work or internship experience working with Javascript/Typescript. You have previous work or internship experience designing, developing and launching backend systems at scale and are experienced using Python or Kotlin. You have mastered taking a simple problem or business scenario into a solution that interacts with multiple software components, and executing on it by writing clear, easily understood, well tested and extensible code. You are comfortable navigating a large code base, debugging others' code, and providing feedback to other engineers through code reviews. Your experience demonstrates that you take ownership of your growth, proactively seeking feedback from your team, your manager, and your stakeholders. You have strong verbal and written communication skills that support effective collaboration with our global engineering team. This position requires either equivalent practical experience or a Bachelor\u2019s degree in a related field. &nbsp; Base Pay Grade - J Equity Grade - 4 Employees new to Affirm typically come in at the start of the pay range. Affirm focuses on providing a simple and transparent pay structure which is based on a variety of factors, including location, experience and job-related skills. Base pay is part of a total compensation package that may include monthly stipends for health, wellness and tech spending, and benefits (including 100% subsidized medical coverage, dental and vision for you and your dependents). In addition, the employees may be eligible for equity rewards offered by Affirm Holdings, Inc. (parent company). CAN base pay range per year: CAD $101,000 - $151,000. This remote role is open only to candidates residing in Alberta, British Columbia, Manitoba, New Brunswick, Newfoundland and Labrador, Nova Scotia, Ontario, Prince Edward Island, or Saskatchewan. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of employment. Some positions may occasionally require in-person work at an Affirm office, and a few are office-based due to the nature of the work. All new hires will be invited to attend an in-person onboarding experience. Benefits designed for you Our benefits reflect our commitment to care, transparency, and flexibility. Here are a few highlights: Health coverage at no cost: We cover 100% of premiums for employees and their dependents. Spending stipends: Monthly stipends support your tech setup, and the ability to choose health and wellness options that are right for you. Time off to recharge: Flexible time off and generous holiday calendars help you rest when you need to. Own a piece of what you build: Our employee stock purchase plan (ESPP) lets you buy Affirm stock at a discount. We\u2019re committed to providing an inclusive interview process, including accommodations for candidates with disabilities. If you need support, we\u2019re happy to help. For positions based in San Francisco or Los Angeles: Affirm considers qualified applicants with arrest and conviction records, as required by law. By clicking \"Submit Application,\" you acknowledge that you have read Affirm's&nbsp; Global Candidate Privacy Notice and consent to the use of your personal information as described."}, {"id": "17ea74c260d765c6766d7e0e", "company": "Affirm", "title": "Software Engineer I, Frontend (Upfunnel)", "location": "Remote Canada", "workplace": "Remote", "source": "greenhouse", "sources": ["greenhouse", "simplify"], "url": "https://job-boards.greenhouse.io/affirm/jobs/7985907003", "score": 92, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets; technical skills detected: javascript, typescript, react, java, go", "skills": "javascript, typescript, react, java, go", "published": "2026-09-11T21:47:40+00:00", "firstSeen": "2026-10-17T00:56:21.255153+00:00", "lastSeen": "2026-10-17T01:24:26.442096+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "At Affirm, we exist for the moments that matter\u2014giving people a clear, predictable way to pay over time, with no hidden fees, no surprises, and no tradeoffs on what matters most. About the Engineering team The Engineering team builds systems that power Affirm\u2019s mission. We take pride in our craft, building reliable, performant, and scalable solutions that touch every part of the business. Whether we\u2019re enabling new ways to pay, ensuring our platforms can scale to the most demanding levels in the industry, or developing seamless servicing experiences, our focus is on solving complex problems through exceptional engineering. About the role The Upfunnel team builds pre-checkout experiences that help shoppers understand Affirm on merchant sites. As a Software Engineer I, you will contribute to reliable, accessible, and performant experiences across Affirm.js, promotional messaging, experimentation, and developer-facing frontend tooling. What You'll Do We are looking for a collaborative, curious Software Engineer I to build reliable and scalable frontend experiences that make Affirm\u2019s value clear before checkout. \u00b7 You will build and improve high-traffic frontend experiences across Affirm.js, promotional messaging, experimentation, and developer-facing tooling. \u00b7 You will work collaboratively and proactively with your team and stakeholders, bringing them along for your work and helping to create visibility and dialog regarding the risks and trade-offs related to your work. \u00b7 You will strike the right balance of speed and quality in your work, ensuring that we hit our business goals while protecting our systems from downtime. \u00b7 You will use browser debugging, monitoring, metrics, and testing tools to maintain reliable cross-browser experiences and contribute to operational issues with your team. \u00b7 You will contribute to a sense of community on your team by engaging in growth and development activities. What We Look For \u00b7 You have previous work or internship experience shipping web apps using declarative UI frameworks like React or Vue. \u00b7 You have previous work or internship experience working with Javascript/Typescript. \u00b7 You have mastered taking a simple problem or business scenario into a solution that interacts with multiple software components, and executing on it by writing clear, easily understood, well tested and extensible code. \u00b7 You are comfortable navigating a large code base, debugging others' code, and providing feedback to other engineers through code reviews. \u00b7 Your experience demonstrates that you take ownership of your growth, proactively seeking feedback from your team, your manager, and your stakeholders. \u00b7 You have strong verbal and written communication skills that support effective collaboration with our global engineering team. This posting is for an existing vacancy. Pay Grade - J Equity Grade - CAN 4 Employees new to Affirm&nbsp; typically come in at the start of the pay range . Affirm focuses on providing a simple and transparent pay structure which is based on a variety of factors, including location, experience and job-related skills. Base pay is part of a total compensation package that may include equity rewards, monthly stipends for health, wellness and tech spending, and benefits (including 100% subsidized medical coverage, dental and vision for you and your dependents.) CAN base pay range per year: &nbsp;101,000 - 151,000 CAD Location - Remote Canada This remote role is open only to candidates residing in Alberta, British Columbia, Manitoba, New Brunswick, Newfoundland and Labrador, Nova Scotia, Ontario, Prince Edward Island, or Saskatchewan. #LI-Remote Remote-first with flexibility built in Affirm is proud to be a remote-first company. Most roles can be done from almost anywhere within the country of employment. Some positions may occasionally require in-person work at an Affirm office, and a few are office-based due to the nature of the work. All new hires will be invited to attend an in-person onboarding experience. Benefits designed for you Our benefits reflect our commitment to care, transparency, and flexibility. Here are a few highlights: Health coverage at no cost: We cover 100% of premiums for employees and their dependents. Spending stipends: Monthly stipends support your tech setup, and the ability to choose health and wellness options that are right for you. Time off to recharge: Flexible time off and generous holiday calendars help you rest when you need to. Own a piece of what you build: Our employee stock purchase plan (ESPP) lets you buy Affirm stock at a discount. We\u2019re committed to providing an inclusive interview process, including accommodations for candidates with disabilities. If you need support, we\u2019re happy to help. For positions based in San Francisco or Los Angeles: Affirm considers qualified applicants with arrest and conviction records, as required by law. By clicking \"Submit Application,\" you acknowledge that you have read Affirm's&nbsp; Global Candidate Privacy Notice and consent to the use of your personal information as described."}, {"id": "05eca650e91cf75036f1e696", "company": "Ciena", "title": "Embedded Software Developer New Grad", "location": "Ottawa, ON, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://ciena.wd5.myworkdayjobs.com/Careers/job/Ottawa/Embedded-Software-Developer--New-Grad-_R031481", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.286859+00:00", "lastSeen": "2026-10-17T01:24:26.475041+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Embedded Software Developer New Grad"}, {"id": "f490ca4b0513ebccad6278c7", "company": "Ciena", "title": "Embedded Software Engineer New Grad", "location": "Ottawa, ON, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://ciena.wd5.myworkdayjobs.com/Careers/job/Ottawa/Embedded-Software-Engineer---New-Grad_R031571", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.286822+00:00", "lastSeen": "2026-10-17T01:24:26.475002+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Embedded Software Engineer New Grad"}, {"id": "28144a1dd3847dd7cbb23cbb", "company": "Quora", "title": "Software Engineer New Grad - Machine Learning Platform", "location": "Remote in USA Remote in Canada", "workplace": "Remote", "source": "simplify", "sources": ["simplify"], "url": "https://jobs.ashbyhq.com/quora/cf34f80e-fe5c-454d-bc9a-4c59993ffda0/application?embed=true", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.283865+00:00", "lastSeen": "2026-10-17T01:24:26.471824+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Software Engineer New Grad - Machine Learning Platform"}, {"id": "3b3db120f63a4b5bec536609", "company": "Cerebras", "title": "Software Engineer New Grad", "location": "Toronto, ON, Canada Sunnyvale, CA", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://jobs.ashbyhq.com/cerebras/99c289fa-8fc6-49f7-b7e8-78ac4e9d99ac/application", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.282608+00:00", "lastSeen": "2026-10-17T01:24:26.470408+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Software Engineer New Grad"}, {"id": "214a42c0d09976d99697b182", "company": "\ud83d\udd25 Stripe", "title": "Software Engineer New Grad", "location": "Toronto, ON, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://stripe.com/jobs/search?gh_jid=8157838", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280626+00:00", "lastSeen": "2026-10-17T01:24:26.468251+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Software Engineer New Grad"}, {"id": "2da672bd784d49407a3f0e80", "company": "\ud83d\udd25 Atlassian", "title": "Software Engineer New Grad - 2027 Graduate", "location": "Burnaby, BC, Canada Vancouver, BC, Canada Richmond, BC, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://campus-globalcareers-atlassian.icims.com/jobs/26070/software-engineer%2c-2027-graduate-canada/job", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280335+00:00", "lastSeen": "2026-10-17T01:24:26.467918+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Software Engineer New Grad - 2027 Graduate"}, {"id": "a8e119c9007e00b74113a14e", "company": "Nexthop.ai", "title": "Software Engineer New Grad", "location": "Burnaby, BC, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://nexthopai.bamboohr.com/careers/62", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280160+00:00", "lastSeen": "2026-10-17T01:24:26.467716+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Software Engineer New Grad"}, {"id": "55821529681914b4a1c29e6d", "company": "Tower Research Capital", "title": "C++ Software Developer New Grad - Rotational Program", "location": "Montreal, QC, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://tower-research.com/open-positions?gh_jid=8126667", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.280147+00:00", "lastSeen": "2026-10-17T01:24:26.467701+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. C++ Software Developer New Grad - Rotational Program"}, {"id": "fc11e8f011d3b27b86a92fc0", "company": "Nutanix", "title": "Software Engineer New Grad - Master\u2019s - Bachelor\u2019s + 2 \ud83c\udf93", "location": "Vancouver, BC, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://jobs.jobvite.com/nutanix/job/oZPOAfwW?nl=1&nl=1&fr=false", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.279484+00:00", "lastSeen": "2026-10-17T01:24:26.467040+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Software Engineer New Grad - Master\u2019s - Bachelor\u2019s + 2 \ud83c\udf93"}, {"id": "6b654902afdab16d8370cc62", "company": "Motorola", "title": "Junior Software Engineer - AI Agent Platform", "location": "Remote in Canada", "workplace": "Remote", "source": "simplify", "sources": ["simplify"], "url": "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Ontario-Remote-Work/Jr-Software-Engineer--AI-Agent-Platform_R66300", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.279285+00:00", "lastSeen": "2026-10-17T01:24:26.466753+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Junior Software Engineer - AI Agent Platform"}, {"id": "581d3677c8f893bde6e39ebc", "company": "Ecolab", "title": "Junior Quality Control Software Developer", "location": "Calgary, AB, Canada", "workplace": "Not stated", "source": "simplify", "sources": ["simplify"], "url": "https://ecolab.wd1.myworkdayjobs.com/ecolab_external/job/CAN---Alberta---Calgary/Junior-Quality-Control-Software-Developer_R00307033", "score": 77, "why": "role title matches target software roles; new-grad or entry-level language found; location explicitly matches Canada targets", "skills": "", "published": "", "firstSeen": "2026-10-17T00:56:21.278852+00:00", "lastSeen": "2026-10-17T01:24:26.466327+00:00", "notified": true, "freshness": "Publication date unknown", "freshnessGroup": "unknown", "description": "New graduate opportunity listed in Simplify's public new-grad list. Junior Quality Control Software Developer"}, {"id": "5d9ebb501d7372ebc8e0d5cc", "company": "HN Who is Hiring", "title": "Early-stage Startup | Software Engineer & Data Analyst | Full-Time | REMOTE (US & Canada) | $150,000 - $180,000 USD We\u2019re hiring for two roles: a strong generalist Softwa", "location": "Location not stated", "workplace": "Remote", "source": "hackernews", "sources": ["hackernews"], "url": "https://news.ycombinator.com/item?id=49971729", "score": 56, "why": "role title matches target software roles; experience requirement not clearly stated; REVIEW: location inferred from title/snippet/description; technical skills detected: python, sql", "skills": "python, sql", "published": "2026-10-05T22:31:30+00:00", "firstSeen": "2026-10-13T23:23:07.036979+00:00", "lastSeen": "2026-10-17T01:24:26.480097+00:00", "notified": true, "freshness": "Published more than 7 days ago", "freshnessGroup": "older", "description": "Early-stage Startup | Software Engineer & Data Analyst | Full-Time | REMOTE (US & Canada) | $150,000 - $180,000 USD We\u2019re hiring for two roles: a strong generalist Software Engineer and a Data Analyst. For the Software Engineer role, we\u2019re looking for someone with solid technical ability and strong computer science fundamentals. Experience building reliable systems, performance optimization, clean architecture, and solving complex problems matters more to us than any specific tech stack. For the Data Analyst role, we\u2019re looking for someone who can turn messy data into clear insights. Strong SQL/Python skills and the ability to drive product and business decisions with data are key. Some reasons you may enjoy working with us: * Collaborative and innovative environment where your voice is heard * Fully remote with flexible hours * Long-term, full-time role (not a fixed-term contract) * High ownership and interesting technical/data challenges * Work with a talented team shipping products customers use every day Only US and Canadian applicants will be considered. If you\u2019re interested, send your resume to paulephraimebuka@gmail.com and mention which role you\u2019re applying for."}]</script>
+  <script id="health-data" type="application/json">[{"source": "ashby", "status": "working", "type": "direct", "jobs": 261, "matches": 6, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "quota": "ok"}, {"source": "greenhouse", "status": "working", "type": "direct", "jobs": 360, "matches": 5, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "quota": "ok"}, {"source": "hackernews", "status": "working", "type": "direct", "jobs": 90, "matches": 1, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "quota": "ok"}, {"source": "lever", "status": "working", "type": "direct", "jobs": 79, "matches": 0, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "quota": "ok"}, {"source": "simplify", "status": "working", "type": "indirect", "jobs": 545, "matches": 13, "failures": 0, "lastSuccess": "2026-10-17T01:24:26.481196+00:00", "lastFailure": "", "quota": "ok"}]</script>
+  <script id="icon-data" type="application/json">{"arrow-up-right": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-arrow-up-right\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cpath d=\"M7 7h10v10\" />\n  \u003cpath d=\"M7 17 17 7\" />\n\u003c/svg>\n", "bookmark": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-bookmark\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cpath d=\"m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z\" />\n\u003c/svg>\n", "briefcase-business": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-briefcase-business\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cpath d=\"M12 12h.01\" />\n  \u003cpath d=\"M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2\" />\n  \u003cpath d=\"M22 13a18.15 18.15 0 0 1-20 0\" />\n  \u003crect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\" />\n\u003c/svg>\n", "check": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-check\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cpath d=\"M20 6 9 17l-5-5\" />\n\u003c/svg>\n", "chevron-down": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-chevron-down\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cpath d=\"m6 9 6 6 6-6\" />\n\u003c/svg>\n", "circle-check": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-circle-check\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003ccircle cx=\"12\" cy=\"12\" r=\"10\" />\n  \u003cpath d=\"m9 12 2 2 4-4\" />\n\u003c/svg>\n", "inbox": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-inbox\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cpolyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\" />\n  \u003cpath d=\"M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\" />\n\u003c/svg>\n", "refresh-cw": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-refresh-cw\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cpath d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\" />\n  \u003cpath d=\"M21 3v5h-5\" />\n  \u003cpath d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\" />\n  \u003cpath d=\"M8 16H3v5\" />\n\u003c/svg>\n", "search": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-search\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003ccircle cx=\"11\" cy=\"11\" r=\"8\" />\n  \u003cpath d=\"m21 21-4.3-4.3\" />\n\u003c/svg>\n", "sliders-horizontal": "\u003c!-- @license lucide-static v0.468.0 - ISC -->\n\u003csvg\n  class=\"lucide lucide-sliders-horizontal\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  \u003cline x1=\"21\" x2=\"14\" y1=\"4\" y2=\"4\" />\n  \u003cline x1=\"10\" x2=\"3\" y1=\"4\" y2=\"4\" />\n  \u003cline x1=\"21\" x2=\"12\" y1=\"12\" y2=\"12\" />\n  \u003cline x1=\"8\" x2=\"3\" y1=\"12\" y2=\"12\" />\n  \u003cline x1=\"21\" x2=\"16\" y1=\"20\" y2=\"20\" />\n  \u003cline x1=\"12\" x2=\"3\" y1=\"20\" y2=\"20\" />\n  \u003cline x1=\"14\" x2=\"14\" y1=\"2\" y2=\"6\" />\n  \u003cline x1=\"8\" x2=\"8\" y1=\"10\" y2=\"14\" />\n  \u003cline x1=\"16\" x2=\"16\" y1=\"18\" y2=\"22\" />\n\u003c/svg>\n"}</script>
+  <script>(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const jobs = JSON.parse($("job-data").textContent);
+  const health = JSON.parse($("health-data").textContent);
+  const icons = JSON.parse($("icon-data").textContent);
+  const storageKey = "canada-job-hub-progress-v1";
+  const esc = (value) =>
+    String(value || "").replace(
+      /[&<>"']/g,
+      (c) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[c],
+    );
+  const icon = (name) => icons[name] || "";
+  const sourceNames = {
+    greenhouse: "Greenhouse",
+    lever: "Lever",
+    ashby: "Ashby",
+    simplify: "Simplify",
+    hackernews: "Hacker News",
+    web: "Web",
+    linkedin: "LinkedIn",
+    indeed: "Indeed",
+    googlejobs: "Google Alerts",
+  };
+  const sourceName = (source) => sourceNames[source] || source;
+  let progress = {};
+  let view = "recent";
+  let visibleLimit = 30;
+  let undoAction = null;
+  let toastTimer;
+  const expanded = new Set();
 
-    for (const name of [...new Set(jobs.map(j => j.source).filter(Boolean))].sort()) {
-      const option = document.createElement('option');
-      option.value = name;
-      option.textContent = name;
-      source.appendChild(option);
+  try {
+    const loaded = JSON.parse(localStorage.getItem(storageKey) || "{}");
+    if (loaded && typeof loaded === "object" && !Array.isArray(loaded)) {
+      for (const [key, entry] of Object.entries(loaded)) {
+        if (/^[a-f0-9]{24}$/.test(key) && entry && typeof entry === "object") {
+          progress[key] = {
+            saved: entry.saved === true,
+            applied: entry.applied === true,
+          };
+        }
+      }
     }
+  } catch {
+    $("storage-note").textContent =
+      "Browser storage unavailable. Changes last for this visit.";
+  }
 
-    function esc(value) {
-      return String(value || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function persist() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(progress));
+    } catch {
+      $("storage-note").textContent =
+        "Could not save in this browser. Changes last for this visit.";
     }
-    function render() {
-      const q = document.getElementById('search').value.toLowerCase().trim();
-      const f = document.getElementById('freshness').value;
-      const s = document.getElementById('source').value;
-      const min = Number(document.getElementById('score').value || 0);
-      const filtered = jobs.filter(j => {
-        const hay = [j.company, j.title, j.location, j.skills, j.why].join(' ').toLowerCase();
-        const dateMatch = !f || (f === 'last7' ? ['fresh', 'recent', 'week'].includes(j.freshnessGroup) :
-          f === 'recent' ? ['fresh', 'recent'].includes(j.freshnessGroup) :
-          f === 'week' ? ['fresh', 'recent', 'week'].includes(j.freshnessGroup) : j.freshnessGroup === f);
-        return (!q || hay.includes(q)) && dateMatch && (!s || j.source === s) && j.score >= min;
-      }).sort((a, b) => (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0));
-      document.getElementById('total').textContent = jobs.length;
-      document.getElementById('fresh').textContent = jobs.filter(j => j.freshnessGroup === 'fresh').length;
-      document.getElementById('high').textContent = jobs.filter(j => j.score >= 75).length;
-      document.getElementById('review').textContent = jobs.filter(j => /review/i.test(j.why)).length;
-      if (!filtered.length) {
-        list.innerHTML = '<div class="empty">No jobs match these filters.</div>';
-        return;
-      }
-      list.innerHTML = filtered.map(j => {
-        const cls = j.score >= 75 ? 'high' : (/review/i.test(j.why) ? 'review' : '');
-        const skills = (j.skills || '').split(',').map(x => x.trim()).filter(Boolean).slice(0, 8).map(x => `<span class="pill">${esc(x)}</span>`).join('');
-        return `<article class="job ${cls}">
-          <div>
-            <h2 class="title">${esc(j.title)}</h2>
-            <div class="meta"><span>${esc(j.company)}</span><span>${esc(j.location)}</span><span>${esc(j.workplace)}</span><span>${esc(j.source)}</span><span>${esc(j.freshness)}</span></div>
-            <div class="meta"><span>Published: ${esc(j.published ? new Date(j.published).toLocaleString() : 'Unknown')}</span><span>First discovered: ${esc(j.firstSeen ? new Date(j.firstSeen).toLocaleString() : 'Unknown')}</span></div>
-            <p class="why">${esc(j.why)}</p>
-            <div class="skills">${skills}</div>
-            <a class="apply" href="${esc(j.url)}" target="_blank" rel="noopener">Open application</a>
-          </div>
-          <div class="score"><b>${j.score}</b><span>match score</span></div>
-        </article>`;
-      }).join('');
+  }
+  function installIcons(root = document) {
+    root.querySelectorAll("[data-icon]").forEach((element) => {
+      element.innerHTML = icon(element.dataset.icon);
+      element.querySelector("svg")?.setAttribute("aria-hidden", "true");
+    });
+  }
+  function daysOld(value) {
+    const parsed = Date.parse(value);
+    const days = (Date.now() - parsed) / 86400000;
+    return Number.isFinite(days) && days >= 0 ? days : null;
+  }
+  function isRecent(job) {
+    const age = daysOld(job.published);
+    return age !== null && age <= 7;
+  }
+  function relative(value) {
+    const days = daysOld(value);
+    if (days === null) return "Unknown";
+    if (days < 1 / 24) return "Just now";
+    if (days < 1) return `${Math.floor(days * 24)}h ago`;
+    if (days < 1.99) return "Yesterday";
+    return `${Math.floor(days)} days ago`;
+  }
+  function absolute(value) {
+    const parsed = Date.parse(value);
+    return Number.isFinite(parsed)
+      ? new Date(parsed).toLocaleString(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short",
+        })
+      : "Unknown";
+  }
+  function saved(job) {
+    return progress[job.id]?.saved === true;
+  }
+  function applied(job) {
+    return progress[job.id]?.applied === true;
+  }
+  function dateMatch(job) {
+    const age = daysOld(job.published);
+    switch ($("freshness").value) {
+      case "last7":
+        return age !== null && age <= 7;
+      case "fresh":
+        return age !== null && age <= 1;
+      case "recent":
+        return age !== null && age <= 3;
+      case "unknown":
+        return age === null;
+      case "older":
+        return age !== null && age > 7;
+      default:
+        return true;
     }
-    function renderHealth() {
-      const target = document.getElementById('health');
-      if (!health.length) {
-        target.innerHTML = '<h2>Source health</h2><div class="empty">No persistent source health yet. Run the monitor once with a database configured.</div>';
-        return;
-      }
-      target.innerHTML = `<h2>Source health</h2><table><thead><tr><th>Source</th><th>Status</th><th>Type</th><th>Jobs</th><th>Matches</th><th>Failures</th><th>Last success</th></tr></thead><tbody>${health.map(h => `<tr><td>${esc(h.source)}</td><td>${esc(h.status)}</td><td>${esc(h.type)}</td><td>${h.jobs}</td><td>${h.matches}</td><td>${h.failures}</td><td>${esc(h.lastSuccess || 'none')}</td></tr>`).join('')}</tbody></table>`;
-    }
-    controls.forEach(control => control.addEventListener('input', render));
-    renderHealth();
+  }
+  function viewMatch(job) {
+    if (view === "saved") return saved(job);
+    if (view === "applied") return applied(job);
+    if (view === "undated")
+      return !applied(job) && daysOld(job.published) === null;
+    if (view === "recent") return !applied(job);
+    return true;
+  }
+  function initials(company) {
+    const letters = company
+      .replace(/[^a-zA-Z0-9 ]/g, "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    return letters.length > 1
+      ? letters
+          .slice(0, 2)
+          .map((word) => word[0])
+          .join("")
+          .toUpperCase()
+      : (letters[0] || "?").slice(0, 2).toUpperCase();
+  }
+  function updateCounts() {
+    const recent = jobs.filter((job) => isRecent(job) && !applied(job)).length;
+    $("recent-count").textContent = recent;
+    $("count-recent").textContent = recent;
+    $("count-saved").textContent = jobs.filter(saved).length;
+    $("count-applied").textContent = jobs.filter(applied).length;
+    $("count-undated").textContent = jobs.filter(
+      (job) => !applied(job) && daysOld(job.published) === null,
+    ).length;
+    $("count-all").textContent = jobs.length;
+  }
+  function jobRow(job) {
+    const open = expanded.has(job.id);
+    const isSaved = saved(job);
+    const isApplied = applied(job);
+    const age = daysOld(job.published);
+    const posted = age === null ? "Date unknown" : relative(job.published);
+    const knownWorkplace = job.workplace !== "Not stated" ? job.workplace : "";
+    const skills = job.skills
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter(Boolean);
+    const saveLabel = `${isSaved ? "Unsave" : "Save"} ${job.title}`;
+    const appliedLabel = `${isApplied ? "Mark not applied:" : "Mark applied:"} ${job.title}`;
+    const dateSubtext =
+      age === null ? "Not verified" : age > 7 ? "Older listing" : "Published";
+    return `<article class="job" data-job="${job.id}">
+      <div class="job-row">
+        <div class="role-column"><div class="company-avatar" aria-hidden="true">${esc(initials(job.company))}</div><div class="role-text">
+          <h3 style="margin:0"><button class="job-title" data-action="details" data-id="${job.id}" aria-expanded="${open}" aria-controls="details-${job.id}">${esc(job.title)}</button></h3>
+          <div class="company-line"><span>${esc(job.company)}</span>${isApplied ? '<span class="job-status">Applied</span>' : ""}${isSaved ? '<span class="job-status">Saved</span>' : ""}</div>
+        </div></div>
+        <div class="location-column"><div class="location-text" title="${esc(job.location)}">${esc(job.location)}</div>${knownWorkplace ? `<div class="subtext">${esc(knownWorkplace)}</div>` : ""}</div>
+        <div class="date-column"><div class="posted ${age === null ? "unknown" : ""}" title="Published: ${esc(absolute(job.published))}">${esc(posted)}</div><div class="subtext">${dateSubtext}</div></div>
+        <div class="match-column"><div class="match-value ${job.score >= 75 ? "high" : ""}" aria-label="Match score ${job.score} out of 100">${job.score}<small> / 100</small></div><div class="match-bar" aria-hidden="true"><span style="width:${Math.max(0, Math.min(100, job.score))}%"></span></div></div>
+        <div class="row-actions">
+          <button class="icon-button ${isSaved ? "is-active" : ""}" data-action="save" data-id="${job.id}" aria-label="${esc(saveLabel)}" aria-pressed="${isSaved}" title="${isSaved ? "Remove from saved" : "Save job"}">${icon("bookmark")}</button>
+          <button class="icon-button ${isApplied ? "is-active" : ""}" data-action="applied" data-id="${job.id}" aria-label="${esc(appliedLabel)}" aria-pressed="${isApplied}" title="${isApplied ? "Mark not applied" : "Mark as applied"}">${icon("check")}</button>
+          <a class="apply" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer" aria-label="Apply: ${esc(job.title)} at ${esc(job.company)}">Apply ${icon("arrow-up-right")}</a>
+        </div>
+      </div>
+      <div class="job-detail"><button class="detail-toggle" data-action="details" data-id="${job.id}" aria-expanded="${open}" aria-controls="details-${job.id}">${open ? "Less detail" : "Details"} ${icon("chevron-down")}</button>
+        <div class="detail-body" id="details-${job.id}" ${open ? "" : "hidden"}>
+          <div class="detail-facts"><span>Published: <strong>${esc(absolute(job.published))}</strong></span><span>First discovered: <strong>${esc(absolute(job.firstSeen))}</strong></span><span>Source: <strong>${esc((job.sources || [job.source]).map(sourceName).join(", "))}</strong></span></div>
+          <div class="detail-facts"><span>Location: <strong>${esc(job.location)}</strong></span></div>
+          <h3>Why it matches</h3><p>${esc(job.why || "Match explanation unavailable.")}</p>
+          ${skills.length ? `<div class="skill-list">${skills.map((skill) => `<span class="skill">${esc(skill)}</span>`).join("")}</div>` : ""}
+          ${job.description ? `<h3>Listing description</h3><div class="description">${esc(job.description)}</div>` : ""}
+        </div>
+      </div>
+    </article>`;
+  }
+  function render() {
+    const query = $("search").value.trim().toLowerCase();
+    const location = $("location").value;
+    const source = $("source").value;
+    const minScore = Number($("score").value);
+    const sort = $("sort").value;
+    const filtered = jobs
+      .filter((job) => {
+        const haystack = [job.company, job.title, job.location, job.skills]
+          .join(" ")
+          .toLowerCase();
+        const locMatch =
+          !location ||
+          (location === "remote"
+            ? /remote/i.test(job.workplace + " " + job.location)
+            : /\b(vancouver|british columbia|bc|burnaby|richmond|surrey|victoria)\b/i.test(
+                job.location,
+              ));
+        return (
+          viewMatch(job) &&
+          dateMatch(job) &&
+          (!query || haystack.includes(query)) &&
+          locMatch &&
+          (!source || (job.sources || [job.source]).includes(source)) &&
+          job.score >= minScore
+        );
+      })
+      .sort((a, b) =>
+        sort === "match"
+          ? b.score - a.score ||
+            (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0)
+          : sort === "discovered"
+            ? (Date.parse(b.firstSeen) || 0) - (Date.parse(a.firstSeen) || 0)
+            : (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0) ||
+              b.score - a.score,
+      );
+    updateCounts();
+    $("filter-more").classList.toggle("is-active", Boolean(source || minScore));
+    $("view-title").textContent = {
+      recent: "Recent opportunities",
+      saved: "Saved for later",
+      applied: "Applications sent",
+      undated: "Publication date unknown",
+      all: "All opportunities",
+    }[view];
+    $("results-count").textContent =
+      `${filtered.length} ${filtered.length === 1 ? "job" : "jobs"}`;
+    $("list").innerHTML =
+      filtered.slice(0, visibleLimit).map(jobRow).join("") +
+      (filtered.length > visibleLimit
+        ? '<button class="secondary load-more" data-action="more">Show more jobs</button>'
+        : "");
+    $("empty").hidden = filtered.length > 0;
+    $("empty-title").textContent =
+      view === "recent"
+        ? "No recent matches yet"
+        : view === "saved"
+          ? "No saved jobs here"
+          : view === "applied"
+            ? "No applications marked yet"
+            : "No matching jobs";
+    $("empty-copy").textContent =
+      view === "recent"
+        ? "No jobs with a verified publication date match your filters. Older and undated listings are kept separately."
+        : "There are no jobs in this view matching the current filters.";
+    $("show-undated").hidden = view !== "recent";
+    document.querySelector(".list-head").hidden = !filtered.length;
+  }
+  function switchView(next, keepDate = false) {
+    view = next;
+    if (!keepDate)
+      $("freshness").value =
+        view === "recent" ? "last7" : view === "undated" ? "unknown" : "";
+    document.querySelectorAll("[data-view]").forEach((button) => {
+      const selected = button.dataset.view === view;
+      button.classList.toggle("active", selected);
+      if (selected) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
+    });
+    visibleLimit = 30;
     render();
-  </script>
+  }
+  function toast(text, undo) {
+    clearTimeout(toastTimer);
+    undoAction = undo;
+    $("toast-text").textContent = text;
+    $("toast").hidden = false;
+    toastTimer = setTimeout(() => {
+      $("toast").hidden = true;
+      undoAction = null;
+    }, 10000);
+  }
+  function changeProgress(job, field) {
+    const previous = { ...(progress[job.id] || {}) };
+    progress[job.id] = { ...previous, [field]: !previous[field] };
+    persist();
+    render();
+    toast(
+      field === "saved"
+        ? progress[job.id].saved
+          ? "Job saved"
+          : "Job removed from saved"
+        : progress[job.id].applied
+          ? "Marked as applied"
+          : "Marked as not applied",
+      () => {
+        progress[job.id] = previous;
+        persist();
+        render();
+      },
+    );
+    const target = $("list").querySelector(
+      `[data-action="${field === "saved" ? "save" : "applied"}"][data-id="${job.id}"]`,
+    );
+    if (target) target.focus({ preventScroll: true });
+    else
+      document
+        .querySelector('[aria-current="page"]')
+        .focus({ preventScroll: true });
+  }
+  function renderHealth() {
+    const failures = health.filter((item) => item.failures > 0).length;
+    $("health-summary").textContent = health.length
+      ? `${health.length} recorded sources${failures ? ` / ${failures} need attention` : ""}`
+      : "No checks recorded";
+    $("health").innerHTML = health
+      .map(
+        (item) =>
+          `<tr><td>${esc(sourceName(item.source))}</td><td class="${item.failures ? "health-bad" : "health-good"}">${item.failures ? `${item.failures} failures` : esc(item.status)}</td><td>${item.jobs}</td><td>${item.matches}</td><td>${esc(absolute(item.lastSuccess))}</td></tr>`,
+      )
+      .join("");
+  }
+
+  document
+    .querySelectorAll("[data-view]")
+    .forEach((button) =>
+      button.addEventListener("click", () => switchView(button.dataset.view)),
+    );
+  for (const id of [
+    "search",
+    "freshness",
+    "location",
+    "source",
+    "score",
+    "sort",
+  ])
+    $(id).addEventListener("input", () => {
+      visibleLimit = 30;
+      if (id === "freshness" && !["saved", "applied"].includes(view)) {
+        const date = $("freshness").value;
+        switchView(
+          date === "unknown"
+            ? "undated"
+            : ["last7", "fresh", "recent"].includes(date)
+              ? "recent"
+              : "all",
+          true,
+        );
+      } else render();
+    });
+  $("list").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+    const action = button.dataset.action;
+    if (action === "more") {
+      visibleLimit += 30;
+      render();
+      return;
+    }
+    const job = jobs.find((item) => item.id === button.dataset.id);
+    if (!job) return;
+    if (action === "details") {
+      const open = !expanded.has(job.id);
+      if (open) expanded.add(job.id);
+      else expanded.delete(job.id);
+      $(`details-${job.id}`).hidden = !open;
+      document
+        .querySelectorAll(`[data-action="details"][data-id="${job.id}"]`)
+        .forEach((toggle) => {
+          toggle.setAttribute("aria-expanded", String(open));
+          if (toggle.classList.contains("detail-toggle"))
+            toggle.innerHTML = `${open ? "Less detail" : "Details"} ${icon("chevron-down")}`;
+        });
+    } else changeProgress(job, action === "save" ? "saved" : "applied");
+  });
+  $("undo").addEventListener("click", () => {
+    if (undoAction) undoAction();
+    undoAction = null;
+    $("toast").hidden = true;
+    clearTimeout(toastTimer);
+  });
+  $("reset").addEventListener("click", () => {
+    for (const id of ["search", "source", "location"]) $(id).value = "";
+    $("score").value = "0";
+    $("sort").value = "newest";
+    switchView(view);
+  });
+  $("show-undated").addEventListener("click", () => switchView("undated"));
+  $("refresh").addEventListener("click", () => window.location.reload());
+  $("filter-more").addEventListener("click", () => {
+    const open = $("filter-more").getAttribute("aria-expanded") !== "true";
+    $("filter-more").setAttribute("aria-expanded", String(open));
+    document.querySelector(".filters").dataset.expanded = String(open);
+  });
+  window.addEventListener("storage", (event) => {
+    if (event.key === storageKey) window.location.reload();
+  });
+  for (const source of [
+    ...new Set(jobs.flatMap((job) => job.sources || [job.source])),
+  ].sort()) {
+    const option = document.createElement("option");
+    option.value = source;
+    option.textContent = sourceName(source);
+    $("source").appendChild(option);
+  }
+  $("updated").textContent = relative($("updated").dateTime).toLowerCase();
+  $("updated").title = absolute($("updated").dateTime);
+  installIcons();
+  renderHealth();
+  render();
+})();
+</script>
 </body>
 </html>

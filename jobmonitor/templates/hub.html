@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Canada Job Hub</title>
+  <style>__HUB_CSS__</style>
+</head>
+<body>
+  <a class="skip" href="#jobs-heading">Skip to jobs</a>
+  <header class="masthead">
+    <div class="shell masthead-inner">
+      <div class="brand"><span class="brand-mark" data-icon="briefcase-business" aria-hidden="true"></span><span>Canada <strong>Job Hub</strong></span></div>
+      <div class="updated"><span class="status-dot"></span><span>Updated <time id="updated" datetime="__HUB_UPDATED__"></time></span><button id="refresh" class="icon-button" aria-label="Refresh jobs" title="Refresh jobs"><span data-icon="refresh-cw"></span></button></div>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="heading-band" aria-labelledby="jobs-heading">
+      <div><div class="eyebrow">YOUR APPLICATION DESK</div><h1 id="jobs-heading">Your job shortlist.</h1></div>
+      <div class="quick-count"><span id="recent-count">0</span><div>posted in the<br>last 7 days</div></div>
+    </section>
+    <nav class="views" aria-label="Job views">
+      <button class="view active" data-view="recent" aria-current="page">Recent <span id="count-recent">0</span></button>
+      <button class="view" data-view="saved">Saved <span id="count-saved">0</span></button>
+      <button class="view" data-view="applied">Applied <span id="count-applied">0</span></button>
+      <button class="view" data-view="undated">Date unknown <span id="count-undated">0</span></button>
+      <button class="view" data-view="all">All jobs <span id="count-all">0</span></button>
+    </nav>
+    <section class="filters" aria-label="Job filters">
+      <div class="search-group"><label class="search"><span data-icon="search" aria-hidden="true"></span><input id="search" type="search" aria-label="Search jobs" placeholder="Search role, company or skill" autocomplete="off"></label><button id="filter-more" class="icon-button filter-more" aria-label="More filters" title="Source and match filters" aria-controls="extra-filters" aria-expanded="false"><span data-icon="sliders-horizontal" aria-hidden="true"></span></button></div>
+      <label class="filter-label">Posted<select id="freshness"><option value="last7" selected>Last 7 days</option><option value="fresh">Last 24 hours</option><option value="recent">Last 3 days</option><option value="">Any date</option><option value="unknown">Date unknown</option><option value="older">Older than 7 days</option></select></label>
+      <label class="filter-label">Location<select id="location"><option value="">Canada (all)</option><option value="bc">Vancouver / BC</option><option value="remote">Remote</option></select></label>
+      <div id="extra-filters" class="extra-filters"><label class="filter-label">Source<select id="source"><option value="">All sources</option></select></label>
+      <label class="filter-label">Match<select id="score"><option value="0">Any score</option><option value="75">75+ match</option><option value="90">90+ match</option></select></label></div>
+    </section>
+    <div class="results-bar"><div><h2 id="view-title">Recent opportunities</h2><span id="results-count" role="status" aria-live="polite"></span></div><label class="sort-label">Sort by <select id="sort" aria-label="Sort jobs"><option value="newest">Newest posted</option><option value="match">Best match</option><option value="discovered">Latest discovered</option></select></label></div>
+    <div class="list-head" aria-hidden="true"><span>ROLE / COMPANY</span><span>LOCATION</span><span>POSTED</span><span>MATCH</span><span></span></div>
+    <section id="list" aria-label="Matching jobs"></section>
+    <div id="empty" class="empty" hidden><span data-icon="inbox" aria-hidden="true"></span><h2 id="empty-title">No recent matches yet</h2><p id="empty-copy"></p><button id="reset" class="secondary">Reset filters</button><button id="show-undated" class="text-button">View jobs with unknown dates</button></div>
+    <details id="source-health" class="source-health"><summary><span data-icon="circle-check" aria-hidden="true"></span>Source activity <span id="health-summary"></span><span class="chevron" data-icon="chevron-down"></span></summary><div class="table-scroll"><table><caption class="sr-only">Recorded source checks</caption><thead><tr><th>Source</th><th>Status</th><th>Listings</th><th>Matches</th><th>Last successful check</th></tr></thead><tbody id="health"></tbody></table></div></details>
+    <footer><span>Publication dates stay separate from discovery dates.</span><span id="storage-note">Saved and Applied stay in this browser.</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toast-text"></span><button id="undo">Undo</button></div>
+  <noscript><p class="shell">Enable JavaScript to search and filter your jobs.</p></noscript>
+  <script id="job-data" type="application/json">__HUB_DATA__</script>
+  <script id="health-data" type="application/json">__HUB_HEALTH__</script>
+  <script id="icon-data" type="application/json">__HUB_ICONS__</script>
+  <script>__HUB_JS__</script>
+</body>
+</html>
