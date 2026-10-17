@@ -1,7 +1,9 @@
 import json
 import unittest
+import tempfile
+from pathlib import Path
 
-from jobmonitor.dashboard import _jobs, _html, _health
+from jobmonitor.dashboard import _jobs, _html, _health, generate
 
 
 def row(source, title='Software Engineer I', published='', company='Acme'):
@@ -34,3 +36,14 @@ class DashboardTests(unittest.TestCase):
         health = _health([('feed', 'failing', 'indirect', 0, 0, 1, '', '',
                            'Request failed https://example.com?api_key=private-token', '')])
         self.assertNotIn('private-token', _html([], health))
+
+    def test_resume_readers_are_packaged_beside_the_generated_page(self):
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder) / 'index.html'
+            generate(str(Path(folder) / 'missing.sqlite3'), str(output))
+            for filename in ['pdf.min.mjs', 'pdf.worker.min.mjs', 'mammoth.browser.min.js']:
+                self.assertTrue((Path(folder) / 'vendor' / filename).is_file())
+            page = output.read_text(encoding='utf8')
+            self.assertIn('id="resumes-workspace"', page)
+            self.assertNotIn('__HUB_MATCHING__', page)
+            self.assertNotIn('__HUB_RESUMES__', page)

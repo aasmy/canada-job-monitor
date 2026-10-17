@@ -36,6 +36,31 @@
   let undoAction = null;
   let toastTimer;
   const expanded = new Set();
+  const resumeMatches = new Map();
+  let previousResumeId = null;
+  function resumeMatch(job) {
+    const resume = window.ResumeHub?.selected();
+    if (!resume) return null;
+    if (!resumeMatches.has(job.id))
+      resumeMatches.set(job.id, ResumeMatching.score(job, resume));
+    return resumeMatches.get(job.id);
+  }
+  function matchScore(job) {
+    return window.ResumeHub?.selected()
+      ? (resumeMatch(job)?.score ?? null)
+      : job.score;
+  }
+  function resumeDetails(job) {
+    const match = resumeMatch(job);
+    if (!match) return "";
+    const resume = window.ResumeHub.selected();
+    return `<section class="resume-comparison"><h3>Match with ${esc(resume.name)}</h3><p class="resume-evidence">${esc(match.evidence)}. ${esc(match.experience)}.</p>
+      ${match.matched.length ? `<h4>Found in your resume</h4><div class="skill-list">${match.matched.map((skill) => `<span class="skill skill-matched">${esc(skill)}</span>`).join("")}</div>` : ""}
+      ${match.missing.length ? `<h4>Listed skills not found in your resume</h4><div class="skill-list">${match.missing.map((skill) => `<span class="skill skill-missing">${esc(skill)}</span>`).join("")}</div>` : ""}
+      ${match.preferredMatched.length || match.preferredMissing.length ? `<h4>Preferred skills</h4><p>Found: ${esc(match.preferredMatched.join(", ") || "None")}. Not found: ${esc(match.preferredMissing.join(", ") || "None")}.</p>` : ""}
+      ${match.score !== null ? `<details class="score-breakdown"><summary>Score breakdown</summary><dl>${match.breakdown.map((item) => `<dt>${esc(item.label)} (${item.weight} weight)</dt><dd>${esc(item.detail)}</dd>`).join("")}</dl><p>Available categories are weighted and normalized to 100. Unstated requirements are not assumed.</p></details>` : ""}
+    </section>`;
+  }
 
   try {
     const loaded = JSON.parse(localStorage.getItem(storageKey) || "{}");
@@ -161,6 +186,12 @@
       .split(",")
       .map((skill) => skill.trim())
       .filter(Boolean);
+    const personal = Boolean(window.ResumeHub?.selected());
+    const score = matchScore(job);
+    const scoreLabel =
+      score === null
+        ? "Not enough detail to score"
+        : `${personal ? "Resume" : "Criteria"} match ${score} out of 100`;
     const saveLabel = `${isSaved ? "Unsave" : "Save"} ${job.title}`;
     const appliedLabel = `${isApplied ? "Mark not applied:" : "Mark applied:"} ${job.title}`;
     const dateSubtext =
@@ -173,7 +204,7 @@
         </div></div>
         <div class="location-column"><div class="location-text" title="${esc(job.location)}">${esc(job.location)}</div>${knownWorkplace ? `<div class="subtext">${esc(knownWorkplace)}</div>` : ""}</div>
         <div class="date-column"><div class="posted ${age === null ? "unknown" : ""}" title="Published: ${esc(absolute(job.published))}">${esc(posted)}</div><div class="subtext">${dateSubtext}</div></div>
-        <div class="match-column"><div class="match-value ${job.score >= 75 ? "high" : ""}" aria-label="Match score ${job.score} out of 100">${job.score}<small> / 100</small></div><div class="match-bar" aria-hidden="true"><span style="width:${Math.max(0, Math.min(100, job.score))}%"></span></div></div>
+        <div class="match-column" title="${esc(scoreLabel)}"><div class="match-value ${score >= 75 ? "high" : ""} ${score === null ? "unscored" : ""}" aria-label="${esc(scoreLabel)}">${score === null ? "Not scored" : `${score}<small> / 100</small>`}</div>${score !== null ? `<div class="match-bar" aria-hidden="true"><span style="width:${Math.max(0, Math.min(100, score))}%"></span></div>` : ""}</div>
         <div class="row-actions">
           <button class="icon-button ${isSaved ? "is-active" : ""}" data-action="save" data-id="${job.id}" aria-label="${esc(saveLabel)}" aria-pressed="${isSaved}" title="${isSaved ? "Remove from saved" : "Save job"}">${icon("bookmark")}</button>
           <button class="icon-button ${isApplied ? "is-active" : ""}" data-action="applied" data-id="${job.id}" aria-label="${esc(appliedLabel)}" aria-pressed="${isApplied}" title="${isApplied ? "Mark not applied" : "Mark as applied"}">${icon("check")}</button>
@@ -184,7 +215,8 @@
         <div class="detail-body" id="details-${job.id}" ${open ? "" : "hidden"}>
           <div class="detail-facts"><span>Published: <strong>${esc(absolute(job.published))}</strong></span><span>First discovered: <strong>${esc(absolute(job.firstSeen))}</strong></span><span>Source: <strong>${esc((job.sources || [job.source]).map(sourceName).join(", "))}</strong></span></div>
           <div class="detail-facts"><span>Location: <strong>${esc(job.location)}</strong></span></div>
-          <h3>Why it matches</h3><p>${esc(job.why || "Match explanation unavailable.")}</p>
+          ${resumeDetails(job)}
+          <h3>${personal ? "Discovery criteria" : "Why it matches"}</h3><p>${esc(job.why || "Match explanation unavailable.")}</p>
           ${skills.length ? `<div class="skill-list">${skills.map((skill) => `<span class="skill">${esc(skill)}</span>`).join("")}</div>` : ""}
           ${job.description ? `<h3>Listing description</h3><div class="description">${esc(job.description)}</div>` : ""}
         </div>
@@ -215,17 +247,18 @@
           (!query || haystack.includes(query)) &&
           locMatch &&
           (!source || (job.sources || [job.source]).includes(source)) &&
-          job.score >= minScore
+          (!minScore ||
+            (matchScore(job) !== null && matchScore(job) >= minScore))
         );
       })
       .sort((a, b) =>
         sort === "match"
-          ? b.score - a.score ||
+          ? (matchScore(b) ?? -1) - (matchScore(a) ?? -1) ||
             (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0)
           : sort === "discovered"
             ? (Date.parse(b.firstSeen) || 0) - (Date.parse(a.firstSeen) || 0)
             : (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0) ||
-              b.score - a.score,
+              (matchScore(b) ?? -1) - (matchScore(a) ?? -1),
       );
     updateCounts();
     $("filter-more").classList.toggle("is-active", Boolean(source || minScore));
@@ -397,6 +430,16 @@
   });
   window.addEventListener("storage", (event) => {
     if (event.key === storageKey) window.location.reload();
+  });
+  window.addEventListener("resumes:changed", () => {
+    resumeMatches.clear();
+    const active = window.ResumeHub?.selected();
+    if (active && active.id !== previousResumeId) $("sort").value = "match";
+    previousResumeId = active?.id || null;
+    $("sort").querySelector('[value="match"]').textContent = active
+      ? "Best resume match"
+      : "Best criteria match";
+    render();
   });
   for (const source of [
     ...new Set(jobs.flatMap((job) => job.sources || [job.source])),
