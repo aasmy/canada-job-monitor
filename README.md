@@ -70,7 +70,13 @@ Generate the local hub:
 python -m jobmonitor.dashboard --output public/index.html
 ```
 
-Open `public/index.html` in your browser to inspect the dashboard locally.
+Serve the generated directory to use PDF/DOCX resume imports:
+
+```powershell
+python -m http.server 8766 --bind 127.0.0.1 --directory public
+```
+
+Open http://127.0.0.1:8766/. Keep `public/vendor` beside the generated HTML.
 
 ## Configuration
 
@@ -188,8 +194,9 @@ the filter icon reveals source and match controls. Click a title or Details for
 the explanation, full location, description, and separate publication/discovery
 timestamps. Source diagnostics are collapsed below the jobs.
 
-The HTML generator bundles local templates and vendored Lucide icons into a
-single page. No CDN, JavaScript build step, or new hosting service is required.
+The HTML generator bundles local templates and vendored Lucide icons into the
+page and copies the resume readers into `public/vendor`. No CDN, JavaScript
+build step, or new hosting service is required.
 
 The hub defaults to jobs published within the last seven days, ordered by
 publication time. Choose All dates, Older, or Unknown to inspect the retained
@@ -210,7 +217,48 @@ Deduplication uses stable external IDs and a conservative company/title/location
 
 The dashboard also displays source health from the persistent database: integration type, configured status, jobs retrieved, matched jobs, consecutive failures, last success, and recent errors. A source warning Telegram message is sent after repeated failures, with rate limiting so temporary outages do not flood you.
 
-## Testing
+## Resume Matching
+
+Open **Resumes** in the hub, choose **Add resume**, and upload a PDF, DOCX, or
+TXT file. Pasting text also works. Give each version a name, review the extracted
+text and detected skills, optionally enter professional experience in years, and
+save. Select a version using **Match against** on the Jobs page. Up to ten
+versions can be kept, edited, downloaded, selected, or deleted.
+
+The selected resume changes job scores, score filters, and Best resume match
+sorting. Technical matches and gaps are shown in each job's Details. Scores
+compare detected core skills (weight 70), explicitly preferred skills (weight
+20), and stated experience when both sides supply it (weight 10). Only available
+categories contribute; weights are normalized to 100. Listing descriptions with
+no comparable core skills are labelled Not scored instead of falling back to a
+generic number. Requirements and preferred sections are detected heuristically;
+this is an explainable keyword comparison, not an ATS or hiring probability.
+Job discovery still uses the configured role, location, and seniority filters.
+
+Original files, text, and active selection are stored in this browser's IndexedDB.
+They are never sent to GitHub, an AI provider, Supabase, or Telegram and are not
+embedded in the generated public page. They are not synchronized across devices;
+clearing browser storage removes them. Download an original file before clearing
+storage. Editing extracted text changes matching, not the original document.
+Telegram keeps its existing criteria-based scores because the cloud monitor
+cannot read browser storage. No extra API key or subscription is required.
+
+Files are limited to 5 MB and PDF extraction to 20 pages. Scanned/image PDFs
+need pasted text; password-protected PDFs need an unlocked copy. Unsupported or
+unreadable files show an error without replacing a saved resume. Use a modern
+browser over HTTPS (or localhost); file:// pages cannot load the PDF worker.
+
+Parser assets are vendored: PDF.js 6.4.299 and Mammoth 1.13.0, with their licenses
+in `jobmonitor/templates/vendor`. Only raw text is extracted; document HTML is
+never rendered. Resume matching does not fetch arbitrary URLs or call an LLM.
+
+Run browser-scoring regression tests with Node.js 22 or later:
+
+```powershell
+node --test tests/resume-matching.test.cjs
+```
+
+## Tests
 
 ```powershell
 python -m unittest discover -s tests -v

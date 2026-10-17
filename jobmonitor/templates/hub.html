@@ -12,14 +12,17 @@
   <header class="masthead">
     <div class="shell masthead-inner">
       <div class="brand"><span class="brand-mark" data-icon="briefcase-business" aria-hidden="true"></span><span>Canada <strong>Job Hub</strong></span></div>
+      <nav class="main-nav" aria-label="Sections"><button id="section-jobs" aria-current="page">Jobs</button><button id="section-resumes">Resumes <span id="resume-count">0</span></button></nav>
       <div class="updated"><span class="status-dot"></span><span>Updated <time id="updated" datetime="__HUB_UPDATED__"></time></span><button id="refresh" class="icon-button" aria-label="Refresh jobs" title="Refresh jobs"><span data-icon="refresh-cw"></span></button></div>
     </div>
   </header>
   <main class="shell">
+    <div id="jobs-workspace">
     <section class="heading-band" aria-labelledby="jobs-heading">
       <div><div class="eyebrow">YOUR APPLICATION DESK</div><h1 id="jobs-heading">Your job shortlist.</h1></div>
       <div class="quick-count"><span id="recent-count">0</span><div>posted in the<br>last 7 days</div></div>
     </section>
+    <section class="resume-switcher" aria-label="Resume matching"><span data-icon="file-text" aria-hidden="true"></span><label for="active-resume">Match against</label><select id="active-resume" disabled><option value="">Loading resumes...</option></select><span id="match-basis">Discovery criteria</span><button id="manage-resumes" class="text-button">Manage resumes</button></section>
     <nav class="views" aria-label="Job views">
       <button class="view active" data-view="recent" aria-current="page">Recent <span id="count-recent">0</span></button>
       <button class="view" data-view="saved">Saved <span id="count-saved">0</span></button>
@@ -35,17 +38,43 @@
       <label class="filter-label">Match<select id="score"><option value="0">Any score</option><option value="75">75+ match</option><option value="90">90+ match</option></select></label></div>
     </section>
     <div class="results-bar"><div><h2 id="view-title">Recent opportunities</h2><span id="results-count" role="status" aria-live="polite"></span></div><label class="sort-label">Sort by <select id="sort" aria-label="Sort jobs"><option value="newest">Newest posted</option><option value="match">Best match</option><option value="discovered">Latest discovered</option></select></label></div>
-    <div class="list-head" aria-hidden="true"><span>ROLE / COMPANY</span><span>LOCATION</span><span>POSTED</span><span>MATCH</span><span></span></div>
+    <div class="list-head" aria-hidden="true"><span>ROLE / COMPANY</span><span>LOCATION</span><span>POSTED</span><span id="match-heading">CRITERIA</span><span></span></div>
     <section id="list" aria-label="Matching jobs"></section>
     <div id="empty" class="empty" hidden><span data-icon="inbox" aria-hidden="true"></span><h2 id="empty-title">No recent matches yet</h2><p id="empty-copy"></p><button id="reset" class="secondary">Reset filters</button><button id="show-undated" class="text-button">View jobs with unknown dates</button></div>
     <details id="source-health" class="source-health"><summary><span data-icon="circle-check" aria-hidden="true"></span>Source activity <span id="health-summary"></span><span class="chevron" data-icon="chevron-down"></span></summary><div class="table-scroll"><table><caption class="sr-only">Recorded source checks</caption><thead><tr><th>Source</th><th>Status</th><th>Listings</th><th>Matches</th><th>Last successful check</th></tr></thead><tbody id="health"></tbody></table></div></details>
     <footer><span>Publication dates stay separate from discovery dates.</span><span id="storage-note">Saved and Applied stay in this browser.</span></footer>
+    </div>
+    <section id="resumes-workspace" hidden aria-labelledby="resumes-heading">
+      <div class="heading-band"><div><div class="eyebrow">YOUR APPLICATION DESK</div><h1 id="resumes-heading">Your resumes.</h1><p id="resume-summary" class="resume-intro">Stored on this device</p></div><button id="add-resume" class="primary"><span data-icon="plus"></span>Add resume</button></div>
+      <div class="privacy-note"><span data-icon="file-text" aria-hidden="true"></span><p>Resumes stay in this browser on this device. Files are processed locally and are never added to the public website. Clearing browser data removes them.</p></div>
+      <div id="resume-message" class="resume-message" role="status" aria-live="polite" hidden></div>
+      <div id="resume-list" class="resume-list"></div>
+      <div id="resume-empty" class="empty"><span data-icon="file-text" aria-hidden="true"></span><h2>No resumes added yet</h2><p>Add a PDF, DOCX, or TXT file, or paste your resume text.</p><button id="first-resume" class="primary">Add your first resume</button></div>
+      <footer>Personal scores appear in the hub. Telegram continues to use discovery criteria.</footer>
+    </section>
   </main>
+  <dialog id="resume-editor" aria-labelledby="resume-editor-title">
+    <form id="resume-form">
+      <div class="editor-heading"><h2 id="resume-editor-title">Add resume</h2><button type="button" id="close-resume-editor" class="icon-button" aria-label="Close resume editor" title="Close">&times;</button></div>
+      <label class="upload-field" id="resume-dropzone"><span data-icon="upload" aria-hidden="true"></span><strong>Choose a resume file</strong><span>PDF, DOCX, TXT / up to 5 MB</span><input id="resume-upload" type="file" accept=".pdf,.docx,.txt" aria-label="Upload resume file"></label>
+      <p id="upload-status" class="upload-status" role="status" aria-live="polite"></p>
+      <div id="resume-form-error" class="form-error" role="alert" hidden></div>
+      <label class="editor-label">Resume name<input id="resume-name" maxlength="100" required placeholder="e.g. Backend developer"></label>
+      <label class="editor-label">Professional experience (years, optional)<input id="resume-years" type="number" min="0" max="50" step="0.5" placeholder="Not specified"></label>
+      <label class="editor-label">Text used for matching<textarea id="resume-text" rows="10" maxlength="100000" required placeholder="Upload a file above, or paste your resume text here."></textarea></label>
+      <div class="detected-skills"><span>Detected technical skills</span><div id="resume-skills" class="skill-list"></div></div>
+      <label class="activate-choice"><input id="resume-activate" type="checkbox" checked>Use this resume for matching</label>
+      <div class="editor-actions"><button type="button" id="cancel-resume-editor" class="secondary">Cancel</button><button id="save-resume" type="submit" class="primary">Save resume</button></div>
+    </form>
+  </dialog>
+  <dialog id="resume-delete" aria-labelledby="resume-delete-title"><form method="dialog"><h2 id="resume-delete-title">Delete resume?</h2><p id="resume-delete-name"></p><p>The stored file and extracted text will be removed from this browser.</p><div class="editor-actions"><button value="cancel" class="secondary">Cancel</button><button value="delete" class="danger">Delete resume</button></div></form></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toast-text"></span><button id="undo">Undo</button></div>
   <noscript><p class="shell">Enable JavaScript to search and filter your jobs.</p></noscript>
   <script id="job-data" type="application/json">__HUB_DATA__</script>
   <script id="health-data" type="application/json">__HUB_HEALTH__</script>
   <script id="icon-data" type="application/json">__HUB_ICONS__</script>
+  <script>__HUB_MATCHING__</script>
+  <script>__HUB_RESUMES__</script>
   <script>__HUB_JS__</script>
 </body>
 </html>

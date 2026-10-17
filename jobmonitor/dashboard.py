@@ -1,4 +1,4 @@
-"""Generate a self-contained job hub from the monitor database."""
+"""Generate a static job hub with local resume-reader assets."""
 from __future__ import annotations
 
 import argparse
@@ -7,6 +7,7 @@ import html
 import json
 import os
 import re
+import shutil
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -111,9 +112,11 @@ def _html(jobs: list[dict], health: list[dict]) -> str:
         'UPDATED': html.escape(now.isoformat()),
         'CSS': (TEMPLATES / 'hub.css').read_text(encoding='utf8'),
         'JS': (TEMPLATES / 'hub.js').read_text(encoding='utf8'),
+        'MATCHING': (TEMPLATES / 'resume-matching.js').read_text(encoding='utf8'),
+        'RESUMES': (TEMPLATES / 'resumes.js').read_text(encoding='utf8'),
     }
     template = (TEMPLATES / 'hub.html').read_text(encoding='utf8')
-    return re.sub(r'__HUB_(DATA|HEALTH|ICONS|UPDATED|CSS|JS)__', lambda m: values[m[1]], template)
+    return re.sub(r'__HUB_(DATA|HEALTH|ICONS|UPDATED|CSS|JS|MATCHING|RESUMES)__', lambda m: values[m[1]], template)
 
 
 def generate(db_path: str, output: str):
@@ -122,6 +125,7 @@ def generate(db_path: str, output: str):
     out = Path(output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(_html(jobs, _health(health_rows)), encoding='utf8')
+    shutil.copytree(TEMPLATES / 'vendor', out.parent / 'vendor', dirs_exist_ok=True)
     return len(jobs)
 
 
